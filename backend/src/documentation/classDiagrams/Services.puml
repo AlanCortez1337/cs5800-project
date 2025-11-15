@@ -1,0 +1,42 @@
+@startuml
+
+class UserService {
+    - userRepository: UserRepository
+
+    + createUser(user: User): User
+    + getAllUser(users: List<User>): List<User>
+    + getUserByID(id: Long): User
+    + getUserByUsername(userName: String): User
+    + getUserByStaffID(id: Long): User
+    + getUserByAdminID(id: Long): User
+
+}
+
+class IngredientService {
+    - ingredientRepository: IngredientRepository
+
+    + createIngredient(ingredients: Ingredient): Ingredient
+    + getAllIngredients(ingredients: List<Ingredient>): List<Ingredient>
+    + getIngredientByID(id: Long): Ingredient
+    + getIngredientByProductName(id: Long): Ingredient
+}
+
+class RecipeService {
+    - recipeRepository: RecipeRepository
+
+    + createRecipe(recipe: Recipe): User
+    + getAllRecipes(recipes: List<Recipe>): List<Recipe>
+    + getRecipeByID(id: Long): Recipe
+    + getRecipeByRecipeName(id: Long): Recipe
+}
+
+class ReportService {
+    - reportRepository: ReportRepository
+
+    + createReport(report: Report): Report
+    + getAllReports(reports: List<Report>): List<Report>
+    + getReportByID(id: Long): Report
+    + getReportByReportTitle(id: Long): Report
+}
+
+@enduml

@@ -1,0 +1,23 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+
+start
+
+:User accesses "/staff" page;
+:User clicks on invite staff button;
+:User enters staff email via form;
+:User submits form;
+fork
+:Show loading UI;
+fork again
+:Send POST request to backend with data collected from form;
+fork again
+:Send email to new staff with invitation;
+fork end
+:Create new staff instance on database;
+:Return success message;
+:Redirect user to staff page;
+
+stop
+
+@enduml

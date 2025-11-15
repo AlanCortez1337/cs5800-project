@@ -1,0 +1,16 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+
+start
+:User accesses "/inventory" page;
+fork
+:Show loading UI;
+fork again
+:Fetch HTML & CSS from server;
+fork again
+:Fetch organization inventory data;
+end fork
+:Hydrate page with intentory data;
+stop
+
+@enduml

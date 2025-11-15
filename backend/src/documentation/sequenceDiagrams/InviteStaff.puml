@@ -1,0 +1,20 @@
+@startuml
+actor Admin
+
+
+participant UI
+participant System
+actor Staff
+participant DB
+
+Admin -> UI: Access "/staff" & clicks invite staff button
+UI -> Admin: Ask admin for staff email
+Admin -> UI: Submits form
+UI -> System: Parse form data
+System -> Staff: Send invitation email
+Staff -> System: Fill out staff details
+System -> DB: Create new staff instance
+System -> UI: Return new staff details
+UI -> Admin: Render new staff on "/staff" page
+
+@enduml

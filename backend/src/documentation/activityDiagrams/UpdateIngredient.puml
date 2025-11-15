@@ -1,0 +1,23 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+
+start
+
+:User browses ingredients;
+:User clicks on a specific ingredient;
+:User clicks edit button;
+:Redirect user to "/ingredient/{ingredientID}/edit";
+:User fills out form on details they want to change;
+:User submits form;
+fork
+:Show loading UI;
+fork again
+:Send POST request to backend with data collected from form;
+end fork
+:Create new instance on database;
+:Return success message;
+:Redirect user to updated ingredient page;
+
+stop
+
+@enduml

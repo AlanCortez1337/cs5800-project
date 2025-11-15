@@ -1,0 +1,16 @@
+@startuml
+actor User
+
+participant UI
+participant System
+participant DB
+
+User -> UI: Access "/inventory" & clicks add ingredient
+UI -> User: Ask user for ingredient details
+User -> UI: Submits form
+UI -> System: Parse form data
+System -> DB: Create instance of new ingredient
+System -> UI: Return ingredient details
+UI -> User: Render new ingredient on "/inventory" page
+
+@enduml

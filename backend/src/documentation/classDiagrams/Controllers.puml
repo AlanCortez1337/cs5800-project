@@ -1,0 +1,49 @@
+@startuml
+
+class UserController {
+    - userService: UserService
+
+    + getAllUsers(): List<User>
+    + getUserByUserID(id: Long): User
+    + getUserByStaffID(id: Long): User
+    + getUserByAdminID(id: Long): User
+    + getUserByUsername(userName: String): User
+    + createUser(user: User): User
+    + updateUser(id: Long, userDetails: User): ResponseEntity<User>
+    + deleteUser(id: Long): ResponseEntity<void>
+}
+
+class IngredientController {
+    - ingredientService: IngredientService
+
+    + getAllIngredients(): List<Ingredient>
+    + getIngredientByID(id: Long): Ingredient
+    + getIngredientByProductName(productName: String): Ingredient
+    + createIngredient(ingredient: Ingredient): Ingredient
+    + updateIngredient(id: Long, ingredientDetails: Ingredient): ResponseEntity<Ingredient>
+    + deleteIngredient(id: Long): ResponseEntity<void>
+}
+
+class RecipeController {
+    - recipeService: RecipeService
+
+    + getAllRecipes(): List<Recipe>
+    + getRecipeByID(id: Long): Recipe
+    + getRecipeByRecipeName(recipeName: String): Recipe
+    + createRecipe(recipe: Recipe): Recipe
+    + updateRecipe(id: Long, recipeDetails: Recipe): ResponseEntity<Recipe>
+    + deleteRecipe(id: Long): ResponseEntity<void>
+}
+
+class ReportController {
+    - reportService: ReportService
+
+    + getAllReports(): List<Report>
+    + getReportByID(id: Long): Report
+    + getReportByReportTitle(reportTitle: String): Report
+    + createReport(report: Report): Report
+    + updateReport(id: Long, reportDetails: Report): ResponseEntity<Report>
+    + deleteReport(id: Long): ResponseEntity<void>
+}
+
+@enduml

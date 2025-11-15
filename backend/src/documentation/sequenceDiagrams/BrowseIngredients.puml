@@ -1,0 +1,16 @@
+@startuml
+actor User
+
+participant UI
+participant System
+participant DB
+
+User -> UI: Access "/inventory"
+UI -> System: Request HTML, CSS, Inventory Data
+System -> DB: query all ingredients
+DB -> System: return ingredients data
+
+System -> UI: Send HTML, CSS, Inventory Data
+UI -> User: Show HTML table of all ingredients
+
+@enduml

@@ -1,0 +1,49 @@
+@startuml
+    interface JpaRepository<T,ID> {
+      + save(entity: T): T
+      + findById(id: ID): Optional<T>
+      + findAll(): List<T>
+      + deleteById(id: ID): void
+      + count(): long
+    }
+
+    interface UserRepository<User, Long> {
+      + findByUserName(userName: String): Optional<User>
+      + findByStaffID(staffID: Long): Optional<User>
+      + findByAdminID(adminID: Long): Optional<User>
+    }
+
+    interface IngredientRepository<Ingredient, Long> {
+      + findByProductName(productName: String): Optional<Ingredient>
+    }
+
+    interface RecipeRepository<Recipe, Long> {
+      + findByRecipeName(recipeName: String): Optional<Recipe>
+    }
+
+    interface ReportRepository<Report, Long> {
+      + findByReportTitle(reportTitle: String): Optional<Report>
+    }
+
+
+    JpaRepository <|-- UserRepository
+    UserRepository ..> User : uses
+    UserRepository ..> "Optional<User>" : returns
+
+    JpaRepository <|-- IngredientRepository
+    IngredientRepository ..> Ingredient : uses
+    IngredientRepository ..> "Optional<Ingredient>" : returns
+
+    JpaRepository <|-- RecipeRepository
+    RecipeRepository ..> Recipe : uses
+    RecipeRepository ..> "Optional<Recipe>" : returns
+
+    JpaRepository <|-- ReportRepository
+    ReportRepository ..> Report : uses
+    ReportRepository ..> "Optional<Report>" : returns
+
+    note right of JpaRepository
+      Use Java Springboot JPA interface
+    end note
+
+@enduml

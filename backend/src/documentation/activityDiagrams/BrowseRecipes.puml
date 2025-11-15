@@ -1,0 +1,18 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+
+start
+
+:User accesses "/recipes" page;
+fork
+:Show loading UI;
+fork again
+:Fetch HTML & CSS from server;
+fork again
+:Fetch organization recipes data;
+end fork
+:Hydrate page with recipes data;
+
+stop
+
+@enduml

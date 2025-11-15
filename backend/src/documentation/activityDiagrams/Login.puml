@@ -1,0 +1,21 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+
+start
+
+:User accesses "/login" page;
+:User fills out username and password;
+:User submits form;
+fork
+:Show loading UI;
+fork again
+:Send POST request to backend with data collected from form;
+fork again
+:Validate username and password;
+fork end
+:Return success message;
+:Redirect user to "/dashboard" page;
+
+stop
+
+@enduml

@@ -1,0 +1,16 @@
+@startuml
+actor User
+
+participant UI
+participant System
+participant DB
+
+User -> UI: Access "/recipes"
+UI -> System: Request HTML, CSS, Recipe Data
+System -> DB: query all ingredients
+DB -> System: return ingredients data
+
+System -> UI: Send HTML, CSS, Recipe Data
+UI -> User: Show HTML table of all recipes
+
+@enduml

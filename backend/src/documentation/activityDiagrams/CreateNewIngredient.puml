@@ -1,0 +1,20 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+
+start
+:User accesses "/inventory" page;
+:User clicks on add ingredient button;
+:Prompt user new ingredient details;
+:User enters name, quantity, unit of measurement via form;
+:User submits form;
+fork
+:Show loading UI;
+fork again
+:Send POST request to backend with data collected from form;
+fork end
+:Create new instance on database;
+:Return success message;
+:Redirect user to new ingredient page;
+stop
+
+@enduml

@@ -1,0 +1,20 @@
+@startuml
+actor User
+
+participant UI
+participant System
+
+User -> UI: Access "/login"
+UI -> User: Ask user for username & password
+User -> UI: Submits form
+
+alt Successful Login
+
+    System -> User: redirect to "/inventory"
+
+else Failed Login
+
+    System -> User: Display error message
+
+end
+@enduml

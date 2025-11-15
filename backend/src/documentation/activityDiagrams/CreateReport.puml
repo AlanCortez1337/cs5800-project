@@ -1,0 +1,21 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+
+start
+
+:User accesses "/reports" page;
+:User clicks on create report button;
+:Prompt user which data points they want;
+:User submits form;
+fork
+:Show loading UI;
+fork again
+:Send POST request to backend with data collected from form;
+fork end
+:Create new instance on database;
+:Return success message;
+:Redirect user to new report page;
+
+stop
+
+@enduml

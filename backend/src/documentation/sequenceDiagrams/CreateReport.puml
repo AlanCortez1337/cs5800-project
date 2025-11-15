@@ -1,0 +1,18 @@
+@startuml
+actor User
+
+participant UI
+participant System
+participant DB
+
+User -> UI: Access "/reports" & clicks create report button
+UI -> User: Ask user for report details
+User -> UI: Submits form
+UI -> System: Parse form data
+System -> DB: Fetch all data required for report based on form data
+DB -> System: return report data
+System -> DB: Create instance of new report
+System -> UI: Return report details
+UI -> User: Render new report on "/report" page
+
+@enduml

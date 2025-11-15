@@ -1,0 +1,120 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+enum UserRole {
+    STAFF
+    ADMIN
+}
+
+enum PRIVILEGES {
+    CREATE_INGREDIENT
+    READ_INGREDIENT
+    UPDATE_INGREDIENT
+    DELETE_INGREDIENT
+    CREATE_RECIPE
+    READ_RECIPE
+    UPDATE_RECIPE
+    DELETE_RECIPE
+}
+
+abstract User {
+    # id: Long
+    # username: String
+    # password: String
+    # role: UserRole
+    # dateCreated: Date
+    - privilege: Privilege
+
+    + getID(): Long
+    + setID(id: Long): void
+    + getUsername(): String
+    + setUsername(userName: String): void
+    + getPassword(): String
+    + setPassword(password: String): void
+    + getRole(): UserRole
+    + setRole(role: UserRole): void
+    + getDateCreated(): Date
+    + getPrivilege(): Privilege
+}
+
+class Privilege {
+    - canCreateIngredient: Boolean
+    - canReadIngredient: Boolean
+    - canUpdateIngredient: Boolean
+    - canDeleteIngredient: Boolean
+    - canCreateRecipe: Boolean
+    - canReadRecipe: Boolean
+    - canUpdateRecipe: Boolean
+    - canDeleteRecipe: Boolean
+
+    - Privilege(privileges: PrivilegeBuilder): void
+
+    + setCreateIngredientAccess(canCreateIngredient: Boolean): void
+    + getCreateIngredientAccess(): Boolean
+    + setReadIngredientAccess(canReadIngredient: Boolean): void
+    + getReadIngredientAccess(): Boolean
+    + setUpdateIngredientAccess(canUpdateIngredient: Boolean): void
+    + getUpdateIngredientAccess(): Boolean
+    + setDeleteIngredientAccess(canDeleteIngredient: Boolean): void
+    + getDeleteIngredientAccess(): Boolean
+    + setCreateRecipeAccess(canCreateRecipe: Boolean): void
+    + getCreateRecipeAccess(): Boolean
+    + setReadRecipeAccess(canReadRecipe: Boolean): void
+    + getReadRecipeAccess(): Boolean
+    + setUpdateRecipeAccess(canUpdateRecipe: Boolean): void
+    + getUpdateRecipeAccess(): Boolean
+    + setDeleteRecipeAccess(canDeleteRecipe: Boolean): void
+    + getDeleteRecipeAccess(): Boolean
+}
+
+class PrivilegeBuilder {
+    - canCreateIngredient: Boolean
+    - canReadIngredient: Boolean
+    - canUpdateIngredient: Boolean
+    - canDeleteIngredient: Boolean
+    - canCreateRecipe: Boolean
+    - canReadRecipe: Boolean
+    - canUpdateRecipe: Boolean
+    - canDeleteRecipe: Boolean
+
+    + allowCreateIngredient(): PrivilegeBuilder
+    + allowReadIngredient(): PrivilegeBuilder
+    + allowUpdateIngredient(): PrivilegeBuilder
+    + allowDeleteIngredient(): PrivilegeBuilder
+    + allowCreateRecipe(): PrivilegeBuilder
+    + allowReadRecipe(): PrivilegeBuilder
+    + allowUpdateRecipe(): PrivilegeBuilder
+    + allowDeleteRecipe(): PrivilegeBuilder
+
+    + build(): Privilege
+}
+
+Privilege +-- PrivilegeBuilder
+
+class Staff {
+    - staffID: Long
+
+    + getStaffID(): Long
+    + setPrivilege(privilegeToUpdate: PRIVILEGES): void
+}
+
+class Admin {
+    - adminID: Long
+
+    + getAdminID(): Long
+    + setPrivilege(privilegeToUpdate: PRIVILEGES, staffID: String): void
+}
+
+class UserFactory() {
+    - {static} instance: UserFactory
+    + {static} getInstance(): UserFactory
+
+    + getUserType(role: UserRole)
+    + createNewUser(userName: String, password: String, role: UserRole)
+}
+
+Staff *-- Privilege
+User <|-- Staff
+User <|-- Admin
+
+@enduml

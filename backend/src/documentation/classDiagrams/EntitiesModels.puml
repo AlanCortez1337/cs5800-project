@@ -1,0 +1,141 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+enum DATA_POINTS {
+    RECIPE_USED
+    INGREDIENT_USED
+    TIMES_INGREDIENT_REACHED_LOW
+}
+
+class Inventory {
+    - inventoryID: String
+    - ingredients: List<Ingredient>
+    - dateUpdated: Date
+
+    + getInventoryID(): String
+    + getIngredients(): List<Ingredient>
+    + setIngredients(ingredients: List<Ingredient>): void
+    + getDateUpdated(): Date
+    + setDateUpdated(date: Date)
+}
+
+class Ingredient {
+    - ingredientID: String
+    - productName: String
+    - quantityDetails: IngredientStorage
+    - unitDetails: IngredientUnit
+    - dateAdded: Date
+    - dateUpdated: Date
+
+    + getIngredientID(): String
+    + getProductName(): String
+    + setProductName(name: String): void
+    + getQuantityDetails(): IngredientStorageRequirement
+    + setQuantityDetails(currentQuantity: Optional<double>, maxQuantityLimit: Optional<double>, alertLowQuantity: Optional<double>, timesReachedLow: Optional<int>): void
+    + getUnitDetails(): IngredientUnit
+    + setUnitDetails(pricePerUnit: Optional<double>, unitOfMeasurement: Optional<String>): void
+    + getDateAdded(): Date
+    + getDateUpdated(): Date
+    + setDateUpdated(date: Date): void
+}
+
+class IngredientUnit {
+    - pricePerUnit: double
+    - unitOfMeasurement: String
+
+    + getPricePerUnit(): double
+    + setPricePerUnit(price: double): void
+    + getUnitOfMeasurement(): String
+    + setUnitOfMeasurement(unit: String): void
+}
+
+class IngredientStorageRequirement {
+    - currentQuantity: double
+    - maxQuantityLimit: double
+    - alertLowQuantity: double
+    - timesReachedLow: int
+
+    + getCurrentQuantity(): double
+    + setCurrentQuantity(quantity: double): void
+    + getMaxQuantityLimit(): double
+    + setMaxQuantityLimit(limit: double): void
+    + getAlertLowQuantity(): double
+    + setAlertLowQuantity(alert: double): void
+    + getTimesReachedLow(): int
+    + setTimesReachedLow(times: int): void
+}
+
+Inventory o-- Ingredient
+Ingredient *-- IngredientStorageRequirement
+Ingredient *-- IngredientUnit
+
+class Recipe {
+    - recipeID: Long
+    - recipeName: String
+    - recipeComponents: List<RecipeComponent>
+    - useCount: int
+    - useHistory: List<RecipeUseHistory>
+
+    + getRecipeID(): Long
+    + getRecipeName(): String
+    + setRecipeName(name: String): void
+    + getRecipeComponents(): List<RecipeComponent>
+    + setRecipeComponents(components: List<RecipeComponent>): void
+    + getUseCount(): int
+    + setUseCount(count: int): void
+    + getUseHistory(): List<RecipeUseHistory>
+    + setUseHistory(history: List<RecipeUseHistory>): void
+}
+
+
+class RecipeUseHistory {
+    - id: Long
+    - lastUsed: Date
+    - recipe: Recipe
+
+    + getRecipeUseHistoryID(): Long
+    + getLastUsed(): Date
+    + setLastUsed(date: Date): void
+    + getRecipe(): Recipe
+    + setRecipe(recipe: Recipe): void
+}
+
+
+class RecipeComponent {
+    - id: Long
+    - ingredient: Ingredient
+    - quantity: int
+
+    + getRecipeComponentID(): Long
+    + getIngredient(): Ingredient
+    + setIngredient(ingredient: Ingredient): void
+    + getQuantity(): int
+    + setQuantity(quantity: int): void
+}
+
+Recipe *-- RecipeComponent
+Recipe *-- RecipeUseHistory
+RecipeComponent o-- Ingredient
+
+class Report {
+    - reportID: String
+    - reportTitle: String
+    - dataPoints: DATA_POINTS
+    - ingredientsData: Ingredient[]
+    - recipeData: Recipe[]
+
+    + getReportID(): String
+    + getReportTitle(): String
+    + setReportTitle(newTitle: String): void
+    + getDataPoints(): DATA_POINTS
+    + setDataPoints(points: DATA_POINTS): void
+    + getIngredientsData(): Ingredient[]
+    + setIngredientsData(data: Ingredient[]): void
+    + getRecipeData(): Recipe[]
+    + setRecipeData(data: Recipe[]): void
+}
+
+Report o-- Ingredient
+Report o-- Recipe
+
+@enduml

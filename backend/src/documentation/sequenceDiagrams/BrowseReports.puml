@@ -1,0 +1,16 @@
+@startuml
+actor User
+
+participant UI
+participant System
+participant DB
+
+User -> UI: Access "/reports"
+UI -> System: Request HTML, CSS, Reports Data
+System -> DB: query all ingredients
+DB -> System: return ingredients data
+
+System -> UI: Send HTML, CSS, Reports Data
+UI -> User: Show HTML table of all reports
+
+@enduml
