@@ -9,18 +9,6 @@ enum DATA_POINTS {
     INGREDIENTS_CREATED
 }
 
-class Inventory {
-    - inventoryID: String
-    - ingredients: List<Ingredient>
-    - dateUpdated: Date
-
-    + getInventoryID(): String
-    + getIngredients(): List<Ingredient>
-    + setIngredients(ingredients: List<Ingredient>): void
-    + getDateUpdated(): Date
-    + setDateUpdated(date: Date)
-}
-
 class Ingredient {
     - ingredientID: String
     - productName: String
