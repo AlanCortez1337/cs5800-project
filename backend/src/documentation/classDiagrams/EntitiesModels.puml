@@ -5,6 +5,8 @@ enum DATA_POINTS {
     RECIPE_USED
     INGREDIENT_USED
     TIMES_INGREDIENT_REACHED_LOW
+    RECIPES_CREATED
+    INGREDIENTS_CREATED
 }
 
 class Inventory {
@@ -31,9 +33,9 @@ class Ingredient {
     + getProductName(): String
     + setProductName(name: String): void
     + getQuantityDetails(): IngredientStorageRequirement
-    + setQuantityDetails(currentQuantity: Optional<double>, maxQuantityLimit: Optional<double>, alertLowQuantity: Optional<double>, timesReachedLow: Optional<int>): void
+    + setQuantityDetails(IngredientStorageRequirement): void
     + getUnitDetails(): IngredientUnit
-    + setUnitDetails(pricePerUnit: Optional<double>, unitOfMeasurement: Optional<String>): void
+    + setUnitDetails(ingredientDetails: IngredientUnit): void
     + getDateAdded(): Date
     + getDateUpdated(): Date
     + setDateUpdated(date: Date): void

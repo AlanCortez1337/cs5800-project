@@ -95,7 +95,7 @@ class Staff {
     - staffID: Long
 
     + getStaffID(): Long
-    + setPrivilege(privilegeToUpdate: PRIVILEGES): void
+    + setPrivilege(privilegeToUpdate: PRIVILEGES, adminID: String): void
 }
 
 class Admin {
