@@ -1,0 +1,12 @@
+package com.alancortez.project.utils;
+
+public enum PRIVILEGES {
+    CREATE_INGREDIENT,
+    READ_INGREDIENT,
+    UPDATE_INGREDIENT,
+    DELETE_INGREDIENT,
+    CREATE_RECIPE,
+    READ_RECIPE,
+    UPDATE_RECIPE,
+    DELETE_RECIPE
+}
