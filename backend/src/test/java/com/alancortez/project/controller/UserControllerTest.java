@@ -71,49 +71,49 @@ class UserControllerTest {
     // GET /api/user/{id} - Get User By ID Tests
     @Test
     void getUserById_ShouldReturnUser_WhenUserExists() {
-        when(userService.getUserById(1L)).thenReturn(testUser1);
+        when(userService.getUserById(1)).thenReturn(testUser1);
 
-        ResponseEntity<User> response = userController.getUserById(1L);
+        ResponseEntity<User> response = userController.getUserById(1);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
         assertEquals("LebronJames23", response.getBody().getUsername());
-        verify(userService, times(1)).getUserById(1L);
+        verify(userService, times(1)).getUserById(1);
     }
 
     @Test
     void getUserById_ShouldReturnNotFound_WhenUserDoesNotExist() {
-        when(userService.getUserById(999L)).thenReturn(null);
+        when(userService.getUserById(999)).thenReturn(null);
 
-        ResponseEntity<User> response = userController.getUserById(999L);
+        ResponseEntity<User> response = userController.getUserById(999);
 
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
         assertNull(response.getBody());
-        verify(userService, times(1)).getUserById(999L);
+        verify(userService, times(1)).getUserById(999);
     }
 
     // GET /api/user/{userName} - Get User By Username Tests
     @Test
     void getUserByUsername_ShouldReturnUser_WhenUserExists() {
-        when(userService.getUserByUsername("LebronJames23")).thenReturn(testUser1);
+        when(userService.getUserByUserName("LebronJames23")).thenReturn(testUser1);
 
-        ResponseEntity<User> response = userController.getUserByUsername("LebronJames23");
+        ResponseEntity<User> response = userController.getUserByUserName("LebronJames23");
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
         assertEquals("LebronJames23", response.getBody().getUsername());
-        verify(userService, times(1)).getUserByUsername("LebronJames23");
+        verify(userService, times(1)).getUserByUserName("LebronJames23");
     }
 
     @Test
     void getUserByUsername_ShouldReturnNotFound_WhenUserDoesNotExist() {
-        when(userService.getUserByUsername("NonExistentUser")).thenReturn(null);
+        when(userService.getUserByUserName("NonExistentUser")).thenReturn(null);
 
-        ResponseEntity<User> response = userController.getUserByUsername("NonExistentUser");
+        ResponseEntity<User> response = userController.getUserByUserName("NonExistentUser");
 
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
         assertNull(response.getBody());
-        verify(userService, times(1)).getUserByUsername("NonExistentUser");
+        verify(userService, times(1)).getUserByUserName("NonExistentUser");
     }
 
     // GET /api/user/staff/{id} - Get User By Staff ID Tests
@@ -184,50 +184,50 @@ class UserControllerTest {
     @Test
     void updateUser_ShouldReturnUpdatedUser_WhenUserExists() {
         User updatedDetails = userFactory.createUser("UpdatedUsername", "newPassword", USER_ROLE.ADMIN);
-        when(userService.getUserById(1L)).thenReturn(testUser1);
+        when(userService.getUserById(1)).thenReturn(testUser1);
         when(userService.createUser(any(User.class))).thenReturn(testUser1);
 
-        ResponseEntity<User> response = userController.updateUser(1L, updatedDetails);
+        ResponseEntity<User> response = userController.updateUser(1, updatedDetails);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
-        verify(userService, times(1)).getUserById(1L);
+        verify(userService, times(1)).getUserById(1);
         verify(userService, times(1)).createUser(any(User.class));
     }
 
     @Test
     void updateUser_ShouldReturnNotFound_WhenUserDoesNotExist() {
         User updatedDetails = userFactory.createUser("UpdatedUsername", "newPassword", USER_ROLE.ADMIN);
-        when(userService.getUserById(999L)).thenReturn(null);
+        when(userService.getUserById(999)).thenReturn(null);
 
-        ResponseEntity<User> response = userController.updateUser(999L, updatedDetails);
+        ResponseEntity<User> response = userController.updateUser(999, updatedDetails);
 
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
         assertNull(response.getBody());
-        verify(userService, times(1)).getUserById(999L);
+        verify(userService, times(1)).getUserById(999);
         verify(userService, never()).createUser(any(User.class));
     }
 
     // DELETE /api/user/{id} - Delete User Tests
     @Test
     void deleteUser_ShouldReturnNoContent() {
-        doNothing().when(userService).deleteUser(1L);
+        doNothing().when(userService).deleteUser(1);
 
-        ResponseEntity<Void> response = userController.deleteUser(1L);
+        ResponseEntity<Void> response = userController.deleteUser(1);
 
         assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
         assertNull(response.getBody());
-        verify(userService, times(1)).deleteUser(1L);
+        verify(userService, times(1)).deleteUser(1);
     }
 
     @Test
     void deleteUser_ShouldReturnNoContent_EvenWhenUserDoesNotExist() {
-        doNothing().when(userService).deleteUser(999L);
+        doNothing().when(userService).deleteUser(999);
 
-        ResponseEntity<Void> response = userController.deleteUser(999L);
+        ResponseEntity<Void> response = userController.deleteUser(999);
 
         assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
         assertNull(response.getBody());
-        verify(userService, times(1)).deleteUser(999L);
+        verify(userService, times(1)).deleteUser(999);
     }
 }

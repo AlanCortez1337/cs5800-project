@@ -25,7 +25,7 @@ public class UserController {
 
     // GET /apiuser/{id}
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id) {
+    public ResponseEntity<User> getUserById(@PathVariable Integer id) {
         User user = userService.getUserById(id);
         if (user != null) {
             return ResponseEntity.ok(user);
@@ -35,8 +35,8 @@ public class UserController {
 
     // GET /apiuser/{userName}
     @GetMapping("/{userName}")
-    public ResponseEntity<User> getUserByUsername(@PathVariable String userName) {
-        User user = userService.getUserByUsername(userName);
+    public ResponseEntity<User> getUserByUserName(@PathVariable String userName) {
+        User user = userService.getUserByUserName(userName);
         if (user != null) {
             return ResponseEntity.ok(user);
         }
@@ -45,8 +45,8 @@ public class UserController {
 
     // GET /apiuser/staff/{id}
     @GetMapping("/staff/{id}")
-    public ResponseEntity<User> getUserByStaffID(@PathVariable String id) {
-        User user = userService.getUserByStaffID(id);
+    public ResponseEntity<User> getUserByStaffID(@PathVariable String staffID) {
+        User user = userService.getUserByStaffID(staffID);
         if (user != null) {
             return ResponseEntity.ok(user);
         }
@@ -55,8 +55,8 @@ public class UserController {
 
     // GET /apiuser/staff/{id}
     @GetMapping("/admin/{id}")
-    public ResponseEntity<User> getUserByAdminID(@PathVariable String id) {
-        User user = userService.getUserByAdminID(id);
+    public ResponseEntity<User> getUserByAdminID(@PathVariable String adminID) {
+        User user = userService.getUserByAdminID(adminID);
         if (user != null) {
             return ResponseEntity.ok(user);
         }
@@ -73,7 +73,7 @@ public class UserController {
 
     // PUT /apiuser/{id}
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User userDetails) {
+    public ResponseEntity<User> updateUser(@PathVariable Integer id, @RequestBody User userDetails) {
         User user = userService.getUserById(id);
         if (user != null) {
             user.setUsername(userDetails.getUsername());
@@ -85,7 +85,7 @@ public class UserController {
 
     // DELETE /apiuser/{id}
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteUser(@PathVariable Integer id) {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
     }
