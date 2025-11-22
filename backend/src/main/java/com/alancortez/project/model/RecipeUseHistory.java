@@ -9,7 +9,7 @@ public class RecipeUseHistory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "recipe_id", nullable = false)
@@ -19,7 +19,7 @@ public class RecipeUseHistory {
     @Column(name = "last_used")
     private Date lastUsed;
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 

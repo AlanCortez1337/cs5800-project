@@ -21,11 +21,11 @@ public class RecipeService {
         return recipeRepository.findAll();
     }
 
-    public Recipe getRecipeById(Long id) {
+    public Recipe getRecipeById(Integer id) {
         return recipeRepository.findById(id).orElse(null);
     }
 
-    public void deleteRecipe(Long id) {
+    public void deleteRecipe(Integer id) {
         recipeRepository.deleteById(id);
     }
 

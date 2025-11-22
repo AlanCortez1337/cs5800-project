@@ -18,15 +18,15 @@ enum PRIVILEGES {
 }
 
 abstract User {
-    # id: Long
+    # id: Integer
     # username: String
     # password: String
     # role: UserRole
     # dateCreated: Date
     - privilege: Privilege
 
-    + getID(): Long
-    + setID(id: Long): void
+    + getID(): Integer
+    + setID(id: Integer): void
     + getUsername(): String
     + setUsername(userName: String): void
     + getPassword(): String
@@ -92,16 +92,16 @@ class PrivilegeBuilder {
 Privilege +-- PrivilegeBuilder
 
 class Staff {
-    - staffID: Long
+    - staffID: Integer
 
-    + getStaffID(): Long
+    + getStaffID(): Integer
     + togglePrivilege(privilegeToUpdate: PRIVILEGES, adminID: String): void
 }
 
 class Admin {
-    - adminID: Long
+    - adminID: Integer
 
-    + getAdminID(): Long
+    + getAdminID(): Integer
     + setPrivilege(privilegeToUpdate: PRIVILEGES, staffID: String): void
 }
 

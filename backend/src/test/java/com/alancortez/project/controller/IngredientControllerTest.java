@@ -126,9 +126,9 @@ class IngredientControllerTest {
     // GET /api/ingredients/{id} - Get Ingredient By ID Tests
     @Test
     void getIngredientById_ShouldReturnIngredient_WhenIngredientExists() {
-        when(ingredientService.getIngredientById(1L)).thenReturn(testIngredient1);
+        when(ingredientService.getIngredientById(1)).thenReturn(testIngredient1);
 
-        ResponseEntity<Ingredient> response = ingredientController.getIngredientById(1L);
+        ResponseEntity<Ingredient> response = ingredientController.getIngredientById(1);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
@@ -137,25 +137,25 @@ class IngredientControllerTest {
         assertEquals(2.50, response.getBody().getUnitDetails().getPricePerUnit());
         assertEquals(5.0, response.getBody().getQuantityDetails().getCurrentQuantity());
         assertEquals(20.0, response.getBody().getQuantityDetails().getMaxQuantityLimit());
-        verify(ingredientService, times(1)).getIngredientById(1L);
+        verify(ingredientService, times(1)).getIngredientById(1);
     }
 
     @Test
     void getIngredientById_ShouldReturnNotFound_WhenIngredientDoesNotExist() {
-        when(ingredientService.getIngredientById(999L)).thenReturn(null);
+        when(ingredientService.getIngredientById(999)).thenReturn(null);
 
-        ResponseEntity<Ingredient> response = ingredientController.getIngredientById(999L);
+        ResponseEntity<Ingredient> response = ingredientController.getIngredientById(999);
 
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
         assertNull(response.getBody());
-        verify(ingredientService, times(1)).getIngredientById(999L);
+        verify(ingredientService, times(1)).getIngredientById(999);
     }
 
     @Test
     void getIngredientById_ShouldReturnIngredientWithStorageAlerts() {
-        when(ingredientService.getIngredientById(2L)).thenReturn(testIngredient2);
+        when(ingredientService.getIngredientById(2)).thenReturn(testIngredient2);
 
-        ResponseEntity<Ingredient> response = ingredientController.getIngredientById(2L);
+        ResponseEntity<Ingredient> response = ingredientController.getIngredientById(2);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(3.5, response.getBody().getQuantityDetails().getCurrentQuantity());
@@ -279,10 +279,10 @@ class IngredientControllerTest {
         updatedIngredient.setUnitDetails(updatedUnit);
         updatedIngredient.setQuantityDetails(updatedStorage);
 
-        when(ingredientService.getIngredientById(1L)).thenReturn(testIngredient1);
+        when(ingredientService.getIngredientById(1)).thenReturn(testIngredient1);
         when(ingredientService.createIngredient(any(Ingredient.class))).thenReturn(updatedIngredient);
 
-        ResponseEntity<Ingredient> response = ingredientController.updateIngredient(1L, updatedDetails);
+        ResponseEntity<Ingredient> response = ingredientController.updateIngredient(1, updatedDetails);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
@@ -291,7 +291,7 @@ class IngredientControllerTest {
         assertEquals(3.50, response.getBody().getUnitDetails().getPricePerUnit());
         assertEquals(10.0, response.getBody().getQuantityDetails().getCurrentQuantity());
         assertEquals(25.0, response.getBody().getQuantityDetails().getMaxQuantityLimit());
-        verify(ingredientService, times(1)).getIngredientById(1L);
+        verify(ingredientService, times(1)).getIngredientById(1);
         verify(ingredientService, times(1)).createIngredient(any(Ingredient.class));
     }
 
@@ -312,13 +312,13 @@ class IngredientControllerTest {
         updatedDetails.setUnitDetails(updatedUnit);
         updatedDetails.setQuantityDetails(updatedStorage);
 
-        when(ingredientService.getIngredientById(999L)).thenReturn(null);
+        when(ingredientService.getIngredientById(999)).thenReturn(null);
 
-        ResponseEntity<Ingredient> response = ingredientController.updateIngredient(999L, updatedDetails);
+        ResponseEntity<Ingredient> response = ingredientController.updateIngredient(999, updatedDetails);
 
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
         assertNull(response.getBody());
-        verify(ingredientService, times(1)).getIngredientById(999L);
+        verify(ingredientService, times(1)).getIngredientById(999);
         verify(ingredientService, never()).createIngredient(any(Ingredient.class));
     }
 
@@ -354,10 +354,10 @@ class IngredientControllerTest {
         updatedDetails.setUnitDetails(newUnit);
         updatedDetails.setQuantityDetails(newStorage);
 
-        when(ingredientService.getIngredientById(1L)).thenReturn(existingIngredient);
+        when(ingredientService.getIngredientById(1)).thenReturn(existingIngredient);
         when(ingredientService.createIngredient(any(Ingredient.class))).thenReturn(existingIngredient);
 
-        ResponseEntity<Ingredient> response = ingredientController.updateIngredient(1L, updatedDetails);
+        ResponseEntity<Ingredient> response = ingredientController.updateIngredient(1, updatedDetails);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         // Verify all fields were updated
@@ -368,7 +368,7 @@ class IngredientControllerTest {
         assertEquals(500.0, existingIngredient.getQuantityDetails().getMaxQuantityLimit());
         assertEquals(100.0, existingIngredient.getQuantityDetails().getAlertLowQuantity());
         assertEquals(5, existingIngredient.getQuantityDetails().getTimesReachedLow());
-        verify(ingredientService, times(1)).getIngredientById(1L);
+        verify(ingredientService, times(1)).getIngredientById(1);
         verify(ingredientService, times(1)).createIngredient(existingIngredient);
     }
 
@@ -389,10 +389,10 @@ class IngredientControllerTest {
         updatedDetails.setUnitDetails(updatedUnit);
         updatedDetails.setQuantityDetails(updatedStorage);
 
-        when(ingredientService.getIngredientById(1L)).thenReturn(testIngredient1);
+        when(ingredientService.getIngredientById(1)).thenReturn(testIngredient1);
         when(ingredientService.createIngredient(any(Ingredient.class))).thenReturn(testIngredient1);
 
-        ResponseEntity<Ingredient> response = ingredientController.updateIngredient(1L, updatedDetails);
+        ResponseEntity<Ingredient> response = ingredientController.updateIngredient(1, updatedDetails);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals("g", testIngredient1.getUnitDetails().getUnitOfMeasurement());
@@ -402,45 +402,45 @@ class IngredientControllerTest {
     // DELETE /api/ingredients/{id} - Delete Ingredient Tests
     @Test
     void deleteIngredient_ShouldReturnNoContent() {
-        doNothing().when(ingredientService).deleteIngredient(1L);
+        doNothing().when(ingredientService).deleteIngredient(1);
 
-        ResponseEntity<Void> response = ingredientController.deleteIngredient(1L);
+        ResponseEntity<Void> response = ingredientController.deleteIngredient(1);
 
         assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
         assertNull(response.getBody());
-        verify(ingredientService, times(1)).deleteIngredient(1L);
+        verify(ingredientService, times(1)).deleteIngredient(1);
     }
 
     @Test
     void deleteIngredient_ShouldReturnNoContent_EvenWhenIngredientDoesNotExist() {
-        doNothing().when(ingredientService).deleteIngredient(999L);
+        doNothing().when(ingredientService).deleteIngredient(999);
 
-        ResponseEntity<Void> response = ingredientController.deleteIngredient(999L);
+        ResponseEntity<Void> response = ingredientController.deleteIngredient(999);
 
         assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
         assertNull(response.getBody());
-        verify(ingredientService, times(1)).deleteIngredient(999L);
+        verify(ingredientService, times(1)).deleteIngredient(999);
     }
 
     @Test
     void deleteIngredient_ShouldHandleServiceException() {
-        doThrow(new RuntimeException("Database error")).when(ingredientService).deleteIngredient(1L);
+        doThrow(new RuntimeException("Database error")).when(ingredientService).deleteIngredient(1);
 
         assertThrows(RuntimeException.class, () -> {
-            ingredientController.deleteIngredient(1L);
+            ingredientController.deleteIngredient(1);
         });
 
-        verify(ingredientService, times(1)).deleteIngredient(1L);
+        verify(ingredientService, times(1)).deleteIngredient(1);
     }
 
     @Test
     void deleteIngredient_ShouldCallServiceWithCorrectId() {
-        doNothing().when(ingredientService).deleteIngredient(2L);
+        doNothing().when(ingredientService).deleteIngredient(2);
 
-        ResponseEntity<Void> response = ingredientController.deleteIngredient(2L);
+        ResponseEntity<Void> response = ingredientController.deleteIngredient(2);
 
         assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
-        verify(ingredientService, times(1)).deleteIngredient(2L);
-        verify(ingredientService, never()).deleteIngredient(1L);
+        verify(ingredientService, times(1)).deleteIngredient(2);
+        verify(ingredientService, never()).deleteIngredient(1);
     }
 }
