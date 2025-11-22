@@ -24,11 +24,11 @@ public class UserService {
         return userRepository.findById(id).orElse(null);
     }
 
-    public User getUserByStaffID(Long id) {
+    public User getUserByStaffID(String id) {
         return userRepository.findByStaffID(id).orElse(null);
     }
 
-    public User getUserByAdminID(Long id) {
+    public User getUserByAdminID(String id) {
         return userRepository.findByAdminID(id).orElse(null);
     }
 

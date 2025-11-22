@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor; // Recommended for easier object creation
 import java.util.Date; // Required for the inherited Date fields
+import java.util.UUID;
 
 @Entity
 @Table(name = "staff")
@@ -15,7 +16,7 @@ import java.util.Date; // Required for the inherited Date fields
 public class Staff extends User {
     @Column(name = "staff_id", unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long staffID;
+    private String staffID;
 
     // --- Private Field (Excluded from automatic JPA mapping) ---
     // If Privilege is a simple transient field not meant for the database:
@@ -30,9 +31,10 @@ public class Staff extends User {
         super(username, password, role);
 
         this.privilege = new Privilege.PrivilegeBuilder().allowReadIngredient().allowReadRecipe().allowUpdateIngredient().build();
+        this.staffID = UUID.randomUUID().toString();
     }
 
-    public void togglePrivilege(PRIVILEGES privilegeToUpdate, Long adminID) {
+    public void togglePrivilege(PRIVILEGES privilegeToUpdate, String adminID) {
         UserService userService = new UserService();
 
         User admin = userService.getUserByAdminID(adminID);
@@ -69,7 +71,7 @@ public class Staff extends User {
 
     }
 
-    public Long getStaffID() {
+    public String getStaffID() {
         return staffID;
     }
 }

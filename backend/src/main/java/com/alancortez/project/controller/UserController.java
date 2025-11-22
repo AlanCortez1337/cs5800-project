@@ -45,7 +45,7 @@ public class UserController {
 
     // GET /apiuser/staff/{id}
     @GetMapping("/staff/{id}")
-    public ResponseEntity<User> getUserByStaffID(@PathVariable Long id) {
+    public ResponseEntity<User> getUserByStaffID(@PathVariable String id) {
         User user = userService.getUserByStaffID(id);
         if (user != null) {
             return ResponseEntity.ok(user);
@@ -55,7 +55,7 @@ public class UserController {
 
     // GET /apiuser/staff/{id}
     @GetMapping("/admin/{id}")
-    public ResponseEntity<User> getUserByAdminID(@PathVariable Long id) {
+    public ResponseEntity<User> getUserByAdminID(@PathVariable String id) {
         User user = userService.getUserByAdminID(id);
         if (user != null) {
             return ResponseEntity.ok(user);
