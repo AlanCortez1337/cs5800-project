@@ -15,7 +15,6 @@ import java.util.UUID;
 @AllArgsConstructor // Lombok: Generates a constructor with all fields (recommended)
 public class Staff extends User {
     @Column(name = "staff_id", unique = true, nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String staffID;
 
     // --- Private Field (Excluded from automatic JPA mapping) ---

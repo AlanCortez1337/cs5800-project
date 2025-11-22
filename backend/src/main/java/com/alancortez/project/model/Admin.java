@@ -13,7 +13,6 @@ import java.util.UUID;
 @NoArgsConstructor
 public class Admin extends User {
     @Column(name = "admin_id", unique = true, nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String adminID;
 
     public Admin(
