@@ -19,39 +19,38 @@ export interface UpdateUserInput {
 
 export interface RecipeComponent {
   id?: number;
-  name: string;
+  ingredient: {
+    ingredientID: number;
+  };
   quantity: number;
-  unit: string;
 }
 
-export interface UseHistory {
+export interface RecipeUseHistory {
   id?: number;
-  usedDate: string;
-  quantity: number;
-  notes?: string;
+  lastUsed: string;
 }
 
 export interface Recipe {
-  id: number;
+  recipeID: number;
   recipeName: string;
   recipeComponents: RecipeComponent[];
   useCount: number;
-  useHistory: UseHistory[];
+  useHistory: RecipeUseHistory[];
 }
 
 export interface CreateRecipeInput {
   recipeName: string;
   recipeComponents: RecipeComponent[];
   useCount?: number;
-  useHistory?: UseHistory[];
+  useHistory?: RecipeUseHistory[];
 }
 
 export interface UpdateRecipeInput {
-  id: number;
+  recipeID: number;
   recipeName?: string;
   recipeComponents?: RecipeComponent[];
   useCount?: number;
-  useHistory?: UseHistory[];
+  useHistory?: RecipeUseHistory[];
 }
 
 export interface UnitDetails {

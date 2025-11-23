@@ -14,7 +14,7 @@ export const recipeKeys = {
   lists: () => [...recipeKeys.all, 'list'] as const,
   list: (filters?: object) => [...recipeKeys.lists(), filters] as const,
   details: () => [...recipeKeys.all, 'detail'] as const,
-  detail: (id: number) => [...recipeKeys.details(), id] as const,
+  detail: (recipeID: number) => [...recipeKeys.details(), recipeID] as const,
 };
 
 // GET all recipes
@@ -30,13 +30,13 @@ export const useRecipes = (
 
 // GET recipe by ID
 export const useRecipe = (
-  id: number,
+  recipeID: number,
   options?: Omit<UseQueryOptions<Recipe>, 'queryKey' | 'queryFn'>
 ) => {
   return useQuery({
-    queryKey: recipeKeys.detail(id),
-    queryFn: () => recipeApi.getRecipeById(id),
-    enabled: !!id,
+    queryKey: recipeKeys.detail(recipeID),
+    queryFn: () => recipeApi.getRecipeById(recipeID),
+    enabled: !!recipeID,
     ...options,
   });
 };
@@ -46,14 +46,11 @@ export const useCreateRecipe = (
   options?: UseMutationOptions<Recipe, Error, CreateRecipeInput>
 ) => {
   const queryClient = useQueryClient();
-
   return useMutation({
     mutationFn: recipeApi.createRecipe,
     onSuccess: (data) => {
-      // Invalidate and refetch all recipe lists
       queryClient.invalidateQueries({ queryKey: recipeKeys.lists() });
-      // Optionally set the new recipe in cache
-      queryClient.setQueryData(recipeKeys.detail(data.id), data);
+      queryClient.setQueryData(recipeKeys.detail(data.recipeID), data);  // Changed
     },
     ...options,
   });
@@ -64,13 +61,10 @@ export const useUpdateRecipe = (
   options?: UseMutationOptions<Recipe, Error, UpdateRecipeInput>
 ) => {
   const queryClient = useQueryClient();
-
   return useMutation({
     mutationFn: recipeApi.updateRecipe,
     onSuccess: (data, variables) => {
-      // Update the specific recipe in cache
-      queryClient.setQueryData(recipeKeys.detail(variables.id), data);
-      // Invalidate all recipe lists to refetch
+      queryClient.setQueryData(recipeKeys.detail(variables.recipeID), data);  // Changed
       queryClient.invalidateQueries({ queryKey: recipeKeys.lists() });
     },
     ...options,

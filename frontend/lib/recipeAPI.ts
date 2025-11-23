@@ -4,12 +4,13 @@ import { CreateRecipeInput, Recipe, UpdateRecipeInput } from "./types";
 export const getAllRecipes = async (): Promise<Recipe[]> => {
   const response = await fetch('/api/recipes');
   if (!response.ok) throw new Error('Failed to fetch recipes');
-  return response.json();
+  const data = await response.json();
+  return data;
 };
 
 // GET recipe by ID
-export const getRecipeById = async (id: number): Promise<Recipe> => {
-  const response = await fetch(`/api/recipes?id=${id}`);
+export const getRecipeById = async (recipeID: number): Promise<Recipe> => {
+  const response = await fetch(`/api/recipes?id=${recipeID}`);  // Changed to 'id'
   if (!response.ok) throw new Error('Failed to fetch recipe');
   return response.json();
 };
@@ -37,8 +38,8 @@ export const updateRecipe = async (data: UpdateRecipeInput): Promise<Recipe> => 
 };
 
 // DELETE recipe
-export const deleteRecipe = async (id: number): Promise<void> => {
-  const response = await fetch(`/api/recipes?id=${id}`, {
+export const deleteRecipe = async (recipeID: number): Promise<void> => {
+  const response = await fetch(`/api/recipes?id=${recipeID}`, {  
     method: 'DELETE',
   });
   if (!response.ok) throw new Error('Failed to delete recipe');

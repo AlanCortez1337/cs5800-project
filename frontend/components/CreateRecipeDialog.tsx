@@ -1,0 +1,218 @@
+'use client';
+
+import { useForm, useFieldArray } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { useCreateRecipe } from '@/hooks/useRecipes';
+import { useIngredients } from '@/hooks/useIngredients';
+import { Loader2, Plus, X } from 'lucide-react';
+import { toast } from 'sonner';
+
+const componentSchema = z.object({
+  ingredientID: z.number().min(1, 'Please select an ingredient'),
+  quantity: z.number().min(1, 'Quantity must be at least 1'),
+});
+
+const formSchema = z.object({
+  recipeName: z.string().min(2, {
+    message: 'Recipe name must be at least 2 characters.',
+  }),
+  recipeComponents: z.array(componentSchema).min(1, 'At least one component is required'),
+});
+
+type FormValues = z.infer<typeof formSchema>;
+
+interface CreateRecipeDialogProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}
+
+export function CreateRecipeDialog({
+  open,
+  onOpenChange,
+}: CreateRecipeDialogProps) {
+  const { data: ingredients } = useIngredients();
+
+  const form = useForm<FormValues>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      recipeName: '',
+      recipeComponents: [{ ingredientID: 0, quantity: 1 }],
+    },
+  });
+
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: 'recipeComponents',
+  });
+
+  const createRecipeMutation = useCreateRecipe({
+    onSuccess: () => {
+      form.reset();
+      onOpenChange(false);
+      toast.success('Recipe created successfully!');
+    },
+    onError: (error) => {
+      toast.error(`Failed to create recipe: ${error.message}`);
+    },
+  });
+
+  function onSubmit(values: FormValues) {
+    createRecipeMutation.mutate({
+      recipeName: values.recipeName,
+      recipeComponents: values.recipeComponents.map(comp => ({
+        ingredient: { ingredientID: comp.ingredientID },
+        quantity: comp.quantity,
+      })),
+      useCount: 0,
+      useHistory: [],
+    });
+  }
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle>Create New Recipe</DialogTitle>
+          <DialogDescription>
+            Add a new recipe with its components. Click save when {"you're"} done.
+          </DialogDescription>
+        </DialogHeader>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <FormField
+              control={form.control}
+              name="recipeName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Recipe Name</FormLabel>
+                  <FormControl>
+                    <Input placeholder="e.g., Chocolate Chip Cookies" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <div className="space-y-3">
+              <div className="flex justify-between items-center">
+                <FormLabel>Components</FormLabel>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => append({ ingredientID: 0, quantity: 1 })}
+                >
+                  <Plus className="h-4 w-4 mr-1" />
+                  Add Component
+                </Button>
+              </div>
+
+              {fields.map((field, index) => (
+                <div key={field.id} className="flex gap-2 items-start p-3 border rounded-lg">
+                  <div className="flex-1 grid grid-cols-2 gap-2">
+                    <FormField
+                      control={form.control}
+                      name={`recipeComponents.${index}.ingredientID`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <Select
+                            onValueChange={(value) => field.onChange(Number(value))}
+                            value={field.value?.toString() || ''}
+                          >
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select ingredient" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              {ingredients?.map((ing) => (
+                                <SelectItem key={ing.ingredientID} value={ing.ingredientID.toString()}>
+                                  {ing.productName}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name={`recipeComponents.${index}.quantity`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormControl>
+                            <Input
+                              type="number"
+                              placeholder="Quantity"
+                              {...field}
+                              onChange={(e) => field.onChange(Number(e.target.value))}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  {fields.length > 1 && (
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => remove(index)}
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            <DialogFooter>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => onOpenChange(false)}
+                disabled={createRecipeMutation.isPending}
+              >
+                Cancel
+              </Button>
+              <Button type="submit" disabled={createRecipeMutation.isPending}>
+                {createRecipeMutation.isPending && (
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                )}
+                Create Recipe
+              </Button>
+            </DialogFooter>
+          </form>
+        </Form>
+      </DialogContent>
+    </Dialog>
+  );
+}
