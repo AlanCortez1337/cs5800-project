@@ -3,18 +3,15 @@
 import * as React from "react"
 import {
     Icon,
-    IconCirclePlusFilled,
     IconDotsVertical,
-  IconInnerShadowTop,
+  IconCoffee,
   IconLogout,
-  IconMail,
   IconUserCircle,
 } from "@tabler/icons-react"
 
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarHeader,
@@ -46,8 +43,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               className="data-[slot=sidebar-menu-button]:!p-1.5"
             >
               <a href="#">
-                <IconInnerShadowTop className="!size-5" />
-                <span className="text-base font-semibold">Acme Inc.</span>
+                <IconCoffee className="!size-5" />
+                <span className="text-base font-semibold">Bean Stock</span>
               </a>
             </SidebarMenuButton>
           </SidebarMenuItem>
@@ -56,9 +53,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarContent>
         <NavMain items={navLinks.navMain} />
       </SidebarContent>
-      <SidebarFooter>
-        <NavUser user={navLinks.user} />
-      </SidebarFooter>
     </Sidebar>
   )
 }
