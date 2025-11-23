@@ -21,11 +21,11 @@ public class IngredientService {
         return ingredientRepository.findAll();
     }
 
-    public Ingredient getIngredientById(Long id) {
+    public Ingredient getIngredientById(Integer id) {
         return ingredientRepository.findById(id).orElse(null);
     }
 
-    public void deleteIngredient(Long id) {
+    public void deleteIngredient(Integer id) {
         ingredientRepository.deleteById(id);
     }
 

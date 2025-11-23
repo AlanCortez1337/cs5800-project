@@ -161,34 +161,34 @@ class RecipeControllerTest {
     // GET /api/recipes/{id} - Get Recipe By ID Tests
     @Test
     void getRecipeById_ShouldReturnRecipe_WhenRecipeExists() {
-        when(recipeService.getRecipeById(1L)).thenReturn(testRecipe1);
+        when(recipeService.getRecipeById(1)).thenReturn(testRecipe1);
 
-        ResponseEntity<Recipe> response = recipeController.getRecipeById(1L);
+        ResponseEntity<Recipe> response = recipeController.getRecipeById(1);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
         assertEquals("Chocolate Chip Cookies", response.getBody().getRecipeName());
         assertEquals(3, response.getBody().getRecipeComponents().size());
         assertEquals(5, response.getBody().getUseCount());
-        verify(recipeService, times(1)).getRecipeById(1L);
+        verify(recipeService, times(1)).getRecipeById(1);
     }
 
     @Test
     void getRecipeById_ShouldReturnNotFound_WhenRecipeDoesNotExist() {
-        when(recipeService.getRecipeById(999L)).thenReturn(null);
+        when(recipeService.getRecipeById(999)).thenReturn(null);
 
-        ResponseEntity<Recipe> response = recipeController.getRecipeById(999L);
+        ResponseEntity<Recipe> response = recipeController.getRecipeById(999);
 
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
         assertNull(response.getBody());
-        verify(recipeService, times(1)).getRecipeById(999L);
+        verify(recipeService, times(1)).getRecipeById(999);
     }
 
     @Test
     void getRecipeById_ShouldReturnRecipeWithAllComponentsAndHistory() {
-        when(recipeService.getRecipeById(1L)).thenReturn(testRecipe1);
+        when(recipeService.getRecipeById(1)).thenReturn(testRecipe1);
 
-        ResponseEntity<Recipe> response = recipeController.getRecipeById(1L);
+        ResponseEntity<Recipe> response = recipeController.getRecipeById(1);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody().getRecipeComponents());
@@ -315,10 +315,10 @@ class RecipeControllerTest {
         updatedRecipe.setUseCount(10);
         updatedRecipe.setUseHistory(updatedHistory);
 
-        when(recipeService.getRecipeById(1L)).thenReturn(testRecipe1);
+        when(recipeService.getRecipeById(1)).thenReturn(testRecipe1);
         when(recipeService.createRecipe(any(Recipe.class))).thenReturn(updatedRecipe);
 
-        ResponseEntity<Recipe> response = recipeController.updateRecipe(1L, updatedDetails);
+        ResponseEntity<Recipe> response = recipeController.updateRecipe(1, updatedDetails);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
@@ -326,7 +326,7 @@ class RecipeControllerTest {
         assertEquals(1, response.getBody().getRecipeComponents().size());
         assertEquals(10, response.getBody().getUseCount());
         assertEquals(1, response.getBody().getUseHistory().size());
-        verify(recipeService, times(1)).getRecipeById(1L);
+        verify(recipeService, times(1)).getRecipeById(1);
         verify(recipeService, times(1)).createRecipe(any(Recipe.class));
     }
 
@@ -338,13 +338,13 @@ class RecipeControllerTest {
         updatedDetails.setUseCount(5);
         updatedDetails.setUseHistory(new ArrayList<>());
 
-        when(recipeService.getRecipeById(999L)).thenReturn(null);
+        when(recipeService.getRecipeById(999)).thenReturn(null);
 
-        ResponseEntity<Recipe> response = recipeController.updateRecipe(999L, updatedDetails);
+        ResponseEntity<Recipe> response = recipeController.updateRecipe(999, updatedDetails);
 
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
         assertNull(response.getBody());
-        verify(recipeService, times(1)).getRecipeById(999L);
+        verify(recipeService, times(1)).getRecipeById(999);
         verify(recipeService, never()).createRecipe(any(Recipe.class));
     }
 
@@ -378,10 +378,10 @@ class RecipeControllerTest {
         updatedDetails.setUseCount(20);
         updatedDetails.setUseHistory(newHistory);
 
-        when(recipeService.getRecipeById(1L)).thenReturn(existingRecipe);
+        when(recipeService.getRecipeById(1)).thenReturn(existingRecipe);
         when(recipeService.createRecipe(any(Recipe.class))).thenReturn(existingRecipe);
 
-        ResponseEntity<Recipe> response = recipeController.updateRecipe(1L, updatedDetails);
+        ResponseEntity<Recipe> response = recipeController.updateRecipe(1, updatedDetails);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         // Verify all fields were updated
@@ -389,41 +389,41 @@ class RecipeControllerTest {
         assertEquals(2, existingRecipe.getRecipeComponents().size());
         assertEquals(20, existingRecipe.getUseCount());
         assertEquals(1, existingRecipe.getUseHistory().size());
-        verify(recipeService, times(1)).getRecipeById(1L);
+        verify(recipeService, times(1)).getRecipeById(1);
         verify(recipeService, times(1)).createRecipe(existingRecipe);
     }
 
     // DELETE /api/recipes/{id} - Delete Recipe Tests
     @Test
     void deleteRecipe_ShouldReturnNoContent() {
-        doNothing().when(recipeService).deleteRecipe(1L);
+        doNothing().when(recipeService).deleteRecipe(1);
 
-        ResponseEntity<Void> response = recipeController.deleteRecipe(1L);
+        ResponseEntity<Void> response = recipeController.deleteRecipe(1);
 
         assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
         assertNull(response.getBody());
-        verify(recipeService, times(1)).deleteRecipe(1L);
+        verify(recipeService, times(1)).deleteRecipe(1);
     }
 
     @Test
     void deleteRecipe_ShouldReturnNoContent_EvenWhenRecipeDoesNotExist() {
-        doNothing().when(recipeService).deleteRecipe(999L);
+        doNothing().when(recipeService).deleteRecipe(999);
 
-        ResponseEntity<Void> response = recipeController.deleteRecipe(999L);
+        ResponseEntity<Void> response = recipeController.deleteRecipe(999);
 
         assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
         assertNull(response.getBody());
-        verify(recipeService, times(1)).deleteRecipe(999L);
+        verify(recipeService, times(1)).deleteRecipe(999);
     }
 
     @Test
     void deleteRecipe_ShouldHandleServiceException() {
-        doThrow(new RuntimeException("Database error")).when(recipeService).deleteRecipe(1L);
+        doThrow(new RuntimeException("Database error")).when(recipeService).deleteRecipe(1);
 
         assertThrows(RuntimeException.class, () -> {
-            recipeController.deleteRecipe(1L);
+            recipeController.deleteRecipe(1);
         });
 
-        verify(recipeService, times(1)).deleteRecipe(1L);
+        verify(recipeService, times(1)).deleteRecipe(1);
     }
 }

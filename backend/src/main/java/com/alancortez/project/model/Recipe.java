@@ -10,7 +10,7 @@ public class Recipe {
     @Id
     @Column(name = "recipe_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long recipeID;
+    private Integer recipeID;
 
     @Column(name = "recipe_name", nullable = false)
     private String recipeName;
@@ -24,7 +24,7 @@ public class Recipe {
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RecipeUseHistory> useHistory;
 
-    public Long getRecipeID() {
+    public Integer getRecipeID() {
         return recipeID;
     }
 

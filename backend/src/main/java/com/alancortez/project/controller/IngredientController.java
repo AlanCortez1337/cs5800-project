@@ -23,7 +23,7 @@ public class IngredientController {
 
     // GET /api/ingredients/{id}
     @GetMapping("/{id}")
-    public ResponseEntity<Ingredient> getIngredientById(@PathVariable Long id) {
+    public ResponseEntity<Ingredient> getIngredientById(@PathVariable Integer id) {
         Ingredient ingredient = ingredientService.getIngredientById(id);
         if (ingredient != null) {
             return ResponseEntity.ok(ingredient);
@@ -39,7 +39,7 @@ public class IngredientController {
 
     // PUT /api/ingredients/{id}
     @PutMapping("/{id}")
-    public ResponseEntity<Ingredient> updateIngredient(@PathVariable Long id, @RequestBody Ingredient ingredientDetails) {
+    public ResponseEntity<Ingredient> updateIngredient(@PathVariable Integer id, @RequestBody Ingredient ingredientDetails) {
         Ingredient ingredient = ingredientService.getIngredientById(id);
         if (ingredient != null) {
             ingredient.setProductName(ingredientDetails.getProductName());
@@ -52,7 +52,7 @@ public class IngredientController {
 
     // DELETE /api/ingredients/{id}
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteIngredient(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteIngredient(@PathVariable Integer id) {
         ingredientService.deleteIngredient(id);
         return ResponseEntity.noContent().build();
     }

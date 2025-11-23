@@ -10,7 +10,7 @@ public class Ingredient {
     @Id
     @Column(name = "ingredient_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String ingredientID;
+    private Integer ingredientID;
 
     @Column(name = "product_name", nullable = false)
     private String productName;
@@ -29,7 +29,7 @@ public class Ingredient {
     @Column(name = "date_updated")
     private Date dateUpdated;
 
-    public String getIngredientID() {
+    public Integer getIngredientID() {
         return ingredientID;
     }
 

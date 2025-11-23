@@ -8,7 +8,7 @@ public class RecipeComponent {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "recipe_id", nullable = false)
@@ -21,7 +21,7 @@ public class RecipeComponent {
     @Column(name = "quantity", nullable = false)
     private Integer quantity;
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
