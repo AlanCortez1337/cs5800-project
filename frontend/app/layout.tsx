@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { AppSidebar } from "@/components/app-sidebar"
 import { SiteHeader } from "@/components/site-header"
+import { Toaster } from "@/components/ui/sonner"
 import {
   SidebarInset,
   SidebarProvider,
@@ -57,6 +58,7 @@ export default function RootLayout({
             </SidebarInset>
           </SidebarProvider>
         </Providers>
+        <Toaster position="top-right" richColors/>
       </body>
     </html>
   );

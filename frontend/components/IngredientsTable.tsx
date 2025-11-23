@@ -7,25 +7,29 @@ import { getColumns } from '@/components/columns';
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
 import { Ingredient } from '@/lib/types';
+import { CreateIngredientDialog } from '@/components/CreateIngredientsDialog';
+import { EditIngredientDialog } from '@/components/EditIngredientsDialog';
+import { toast } from 'sonner';
 
 export default function IngredientsTable() {
   const [selectedIngredient, setSelectedIngredient] = useState<Ingredient | null>(null);
+  const [createDialogOpen, setCreateDialogOpen] = useState(false);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
   
   const { data: ingredients, isLoading, error } = useIngredients();
   
   const deleteIngredientMutation = useDeleteIngredient({
     onSuccess: () => {
-      alert('Ingredient deleted successfully!');
+      toast.success('Ingredient deleted successfully!');
     },
     onError: (error) => {
-      alert(`Error: ${error.message}`);
+      toast.error(`Failed to update ingredient: ${error.message}`);
     },
   });
 
   const handleEdit = (ingredient: Ingredient) => {
     setSelectedIngredient(ingredient);
-    // Open your edit modal/form here
-    console.log('Edit ingredient:', ingredient);
+    setEditDialogOpen(true);
   };
 
   const handleDelete = (id: number) => {
@@ -35,8 +39,7 @@ export default function IngredientsTable() {
   };
 
   const handleCreate = () => {
-    // Open your create modal/form here
-    console.log('Create new ingredient');
+    setCreateDialogOpen(true);
   };
 
   if (isLoading) {
@@ -58,19 +61,32 @@ export default function IngredientsTable() {
   const columns = getColumns({ onEdit: handleEdit, onDelete: handleDelete });
 
   return (
-    <div className="container mx-auto py-10">
-      <div className="flex justify-between items-center mb-6">
-        <div>
-          <h1 className="text-3xl font-bold">Ingredients</h1>
-          <p className="text-muted-foreground">Manage your ingredient inventory</p>
+    <>
+      <div className="container mx-auto py-10">
+        <div className="flex justify-between items-center mb-6">
+          <div>
+            <h1 className="text-3xl font-bold">Ingredients</h1>
+            <p className="text-muted-foreground">Manage your ingredient inventory</p>
+          </div>
+          <Button onClick={handleCreate}>
+            <Plus className="mr-2 h-4 w-4" />
+            Add Ingredient
+          </Button>
         </div>
-        <Button onClick={handleCreate}>
-          <Plus className="mr-2 h-4 w-4" />
-          Add Ingredient
-        </Button>
+        
+        <DataTable columns={columns} data={ingredients || []} />
       </div>
+
+      <CreateIngredientDialog
+        open={createDialogOpen}
+        onOpenChange={setCreateDialogOpen}
+      />
       
-      <DataTable columns={columns} data={ingredients || []} />
-    </div>
+      <EditIngredientDialog
+        open={editDialogOpen}
+        onOpenChange={setEditDialogOpen}
+        ingredient={selectedIngredient}
+      />
+    </>
   );
 }

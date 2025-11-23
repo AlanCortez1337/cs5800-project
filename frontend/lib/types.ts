@@ -55,21 +55,24 @@ export interface UpdateRecipeInput {
 }
 
 export interface UnitDetails {
-  unit: string;
-  unitsPerContainer?: number;
+  unitOfMeasurement: string;
+  pricePerUnit?: number;
 }
 
 export interface QuantityDetails {
-  totalQuantity: number;
-  availableQuantity: number;
-  reservedQuantity?: number;
+  currentQuantity: number;
+  maxQuantityLimit?: number;
+  alertLowQuantity?: number;
+  timesReachedLow?: number;
 }
 
 export interface Ingredient {
-  id: number;
+  ingredientID: number;
   productName: string;
   unitDetails: UnitDetails;
   quantityDetails: QuantityDetails;
+  dateAdded?: string;
+  dateUpdated?: string;
 }
 
 export interface CreateIngredientInput {
@@ -79,7 +82,7 @@ export interface CreateIngredientInput {
 }
 
 export interface UpdateIngredientInput {
-  id: number;
+  ingredientID: number;
   productName?: string;
   unitDetails?: UnitDetails;
   quantityDetails?: QuantityDetails;

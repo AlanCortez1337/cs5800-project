@@ -72,16 +72,16 @@ export async function POST(request: NextRequest) {
 export async function PUT(request: NextRequest) {
   try {
     const body = await request.json();
-    const { id, ...ingredientDetails } = body;
+    const { ingredientID, ...ingredientDetails } = body;
 
-    if (!id) {
+    if (!ingredientID) {
       return NextResponse.json(
         { error: 'Ingredient ID is required' },
         { status: 400 }
       );
     }
 
-    const response = await fetch(`${SPRING_BOOT_API}/api/ingredients/${id}`, {
+    const response = await fetch(`${SPRING_BOOT_API}/api/ingredients/${ingredientID}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
