@@ -15,7 +15,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -169,26 +171,76 @@ public class UserControllerTest {
     // POST /api/user - Create User Tests
     @Test
     void createUser_ShouldReturnCreatedUser() {
+        // Arrange
+        Map<String, String> request = new HashMap<>();
+        request.put("userName", "KobeBryant24");
+        request.put("password", "password");
+        request.put("role", "STAFF");
+
         User newUser = userFactory.createUser("KobeBryant24", "password", USER_ROLE.STAFF);
         when(userService.createUser(any(User.class))).thenReturn(newUser);
 
-        User result = userController.createUser("KobeBryant24", "password", USER_ROLE.STAFF);
+        // Act
+        User result = userController.createUser(request);
 
+        // Assert
         assertNotNull(result);
         assertEquals("KobeBryant24", result.getUsername());
         assertEquals(USER_ROLE.STAFF, result.getRole());
         verify(userService, times(1)).createUser(any(User.class));
     }
 
+    @Test
+    void createUser_ShouldCreateAdminUser_WhenRoleIsAdmin() {
+        // Arrange
+        Map<String, String> request = new HashMap<>();
+        request.put("userName", "AdminUser");
+        request.put("password", "adminpass");
+        request.put("role", "ADMIN");
+
+        User adminUser = userFactory.createUser("AdminUser", "adminpass", USER_ROLE.ADMIN);
+        when(userService.createUser(any(User.class))).thenReturn(adminUser);
+
+        // Act
+        User result = userController.createUser(request);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals("AdminUser", result.getUsername());
+        assertEquals(USER_ROLE.ADMIN, result.getRole());
+        verify(userService, times(1)).createUser(any(User.class));
+    }
+
+    @Test
+    void createUser_ShouldThrowException_WhenInvalidRole() {
+        // Arrange
+        Map<String, String> request = new HashMap<>();
+        request.put("userName", "TestUser");
+        request.put("password", "password");
+        request.put("role", "INVALID_ROLE");
+
+        // Act & Assert
+        assertThrows(IllegalArgumentException.class, () -> {
+            userController.createUser(request);
+        });
+    }
+
+
     // PUT /api/user/{id} - Update User Tests
     @Test
     void updateUser_ShouldReturnUpdatedUser_WhenUserExists() {
-        User updatedDetails = userFactory.createUser("UpdatedUsername", "newPassword", USER_ROLE.ADMIN);
+        // Arrange
+        Map<String, String> request = new HashMap<>();
+        request.put("username", "UpdatedUsername");
+        request.put("password", "newPassword");
+
         when(userService.getUserById(1)).thenReturn(testUser1);
         when(userService.createUser(any(User.class))).thenReturn(testUser1);
 
-        ResponseEntity<User> response = userController.updateUser(1, updatedDetails);
+        // Act
+        ResponseEntity<User> response = userController.updateUser(1, request);
 
+        // Assert
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
         verify(userService, times(1)).getUserById(1);
@@ -196,28 +248,107 @@ public class UserControllerTest {
     }
 
     @Test
+    void updateUser_ShouldUpdateOnlyUsername_WhenPasswordIsNull() {
+        // Arrange
+        Map<String, String> request = new HashMap<>();
+        request.put("username", "UpdatedUsername");
+        // password is null
+
+        when(userService.getUserById(1)).thenReturn(testUser1);
+        when(userService.createUser(any(User.class))).thenReturn(testUser1);
+
+        // Act
+        ResponseEntity<User> response = userController.updateUser(1, request);
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        verify(userService, times(1)).getUserById(1);
+        verify(userService, times(1)).createUser(any(User.class));
+    }
+
+    @Test
+    void updateUser_ShouldNotUpdatePassword_WhenPasswordIsEmpty() {
+        // Arrange
+        Map<String, String> request = new HashMap<>();
+        request.put("username", "UpdatedUsername");
+        request.put("password", ""); // empty password
+
+        String originalPassword = testUser1.getPassword();
+        when(userService.getUserById(1)).thenReturn(testUser1);
+        when(userService.createUser(any(User.class))).thenReturn(testUser1);
+
+        // Act
+        ResponseEntity<User> response = userController.updateUser(1, request);
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals(originalPassword, testUser1.getPassword()); // Password unchanged
+        verify(userService, times(1)).getUserById(1);
+        verify(userService, times(1)).createUser(any(User.class));
+    }
+
+    @Test
     void updateUser_ShouldReturnNotFound_WhenUserDoesNotExist() {
-        User updatedDetails = userFactory.createUser("UpdatedUsername", "newPassword", USER_ROLE.ADMIN);
+        // Arrange
+        Map<String, String> request = new HashMap<>();
+        request.put("username", "UpdatedUsername");
+        request.put("password", "newPassword");
+
         when(userService.getUserById(999)).thenReturn(null);
 
-        ResponseEntity<User> response = userController.updateUser(999, updatedDetails);
+        // Act
+        ResponseEntity<User> response = userController.updateUser(999, request);
 
+        // Assert
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
         assertNull(response.getBody());
         verify(userService, times(1)).getUserById(999);
         verify(userService, never()).createUser(any(User.class));
     }
 
+    @Test
+    void updateUser_ShouldHandleEmptyRequest() {
+        // Arrange
+        Map<String, String> request = new HashMap<>();
+        // empty request - no username or password
+
+        when(userService.getUserById(1)).thenReturn(testUser1);
+        when(userService.createUser(any(User.class))).thenReturn(testUser1);
+
+        // Act
+        ResponseEntity<User> response = userController.updateUser(1, request);
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        verify(userService, times(1)).getUserById(1);
+        verify(userService, times(1)).createUser(any(User.class));
+    }
+
     // DELETE /api/user/{id} - Delete User Tests
     @Test
     void deleteUser_ShouldReturnNoContent() {
+        // Arrange
         doNothing().when(userService).deleteUser(1);
 
+        // Act
         ResponseEntity<Void> response = userController.deleteUser(1);
 
+        // Assert
         assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
         assertNull(response.getBody());
         verify(userService, times(1)).deleteUser(1);
+    }
+
+    @Test
+    void deleteUser_ShouldCallServiceDelete() {
+        // Arrange & Act
+        userController.deleteUser(999);
+
+        // Assert
+        verify(userService, times(1)).deleteUser(999);
     }
 
     @Test

@@ -14,45 +14,45 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U admin"]
+      test: ["CMD-SHELL", "pg_isready -U admin -d inventoryApp"]
       interval: 5s
       timeout: 5s
       retries: 5
     networks:
       - app-network
 
-#  app:
-#    build:
-#      context: .
-#      dockerfile: Dockerfile
-#    container_name: springboot_app
-#    depends_on:
-#      db:
-#        condition: service_healthy
-#    environment:
-#      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/inventoryApp
-#      SPRING_DATASOURCE_USERNAME: admin
-#      SPRING_DATASOURCE_PASSWORD: admin123
-#      SPRING_JPA_HIBERNATE_DDL_AUTO: update
-#    ports:
-#      - "8080:8080"
-#    networks:
-#      - app-network
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: springboot_app
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/inventoryApp
+      SPRING_DATASOURCE_USERNAME: admin
+      SPRING_DATASOURCE_PASSWORD: admin123
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    ports:
+      - "8080:8080"
+    networks:
+      - app-network
 
-#  nextjs:
-#    build:
-#      context: ../frontend  # Adjust this path to your Next.js app directory
-#      dockerfile: Dockerfile
-#    container_name: nextjs_app
-#    depends_on:
-#      - app
-#    environment:
-#      API_URL: http://app:8080
-#      NEXT_PUBLIC_API_URL: http://localhost:8080
-#    ports:
-#      - "3000:3000"
-#    networks:
-#      - app-network
+  nextjs:
+    build:
+      context: ../frontend  # Adjust this path to your Next.js app directory
+      dockerfile: Dockerfile
+    container_name: nextjs_app
+    depends_on:
+      - app
+    environment:
+      API_URL: http://app:8080
+      NEXT_PUBLIC_API_URL: http://app:8080
+    ports:
+      - "3000:3000"
+    networks:
+      - app-network
 
 volumes:
   postgres_data:
