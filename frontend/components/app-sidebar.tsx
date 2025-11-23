@@ -33,7 +33,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Button } from "./ui/button"
+import Link from "next/link"
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
@@ -77,12 +77,17 @@ function NavMain({
       <SidebarGroupContent className="flex flex-col gap-2">
         <SidebarMenu>
           {items.map((item) => (
-            <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton tooltip={item.title}>
-                {item.icon && <item.icon className="size-8"/>}
-                <span className="text-md">{item.title}</span>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
+            <Link
+              key={item.title}
+              href={item.url}
+            >
+              <SidebarMenuItem >
+                <SidebarMenuButton tooltip={item.title}>
+                  {item.icon && <item.icon className="size-8"/>}
+                  <span className="text-md">{item.title}</span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </Link>
           ))}
         </SidebarMenu>
       </SidebarGroupContent>
