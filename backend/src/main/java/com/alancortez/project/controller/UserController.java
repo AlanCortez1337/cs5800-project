@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/user")
@@ -65,19 +66,30 @@ public class UserController {
 
     // POST /apiuser
     @PostMapping
-    public User createUser(@RequestBody String userName, String password, @RequestBody USER_ROLE role) {
+    public User createUser(@RequestBody Map<String, String> request) {
         UserFactory userFactory = UserFactory.getInstance();
+
+        String userName = request.get("userName");
+        String password = request.get("password");
+        USER_ROLE role = USER_ROLE.valueOf(request.get("role"));
 
         return userService.createUser(userFactory.createUser(userName, password, role));
     }
 
     // PUT /apiuser/{id}
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Integer id, @RequestBody User userDetails) {
+    public ResponseEntity<User> updateUser(@PathVariable Integer id, @RequestBody Map<String, String> request) {
         User user = userService.getUserById(id);
         if (user != null) {
-            user.setUsername(userDetails.getUsername());
-            user.setPassword(userDetails.getPassword());
+            String username = request.get("username");
+            String password = request.get("password");
+
+            if (username != null) {
+                user.setUsername(username);
+            }
+            if (password != null && !password.isEmpty()) {
+                user.setPassword(password);
+            }
             return ResponseEntity.ok(userService.createUser(user));
         }
         return ResponseEntity.notFound().build();

@@ -17,9 +17,7 @@ public class Staff extends User {
     @Column(name = "staff_id", unique = true, nullable = false)
     private String staffID;
 
-    // --- Private Field (Excluded from automatic JPA mapping) ---
-    // If Privilege is a simple transient field not meant for the database:
-    @Column(name = "privilege", unique = false, nullable = false)
+    @Embedded
     private Privilege privilege;
 
     public Staff(

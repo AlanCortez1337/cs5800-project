@@ -45,14 +45,14 @@ public class Privilege {
     }
 
     public static class PrivilegeBuilder {
-        private Boolean canCreateIngredient;
-        private Boolean canReadIngredient;
-        private Boolean canUpdateIngredient;
-        private Boolean canDeleteIngredient;
-        private Boolean canCreateRecipe;
-        private Boolean canReadRecipe;
-        private Boolean canUpdateRecipe;
-        private Boolean canDeleteRecipe;
+        private Boolean canCreateIngredient = false;
+        private Boolean canReadIngredient = false;
+        private Boolean canUpdateIngredient = false;
+        private Boolean canDeleteIngredient = false;
+        private Boolean canCreateRecipe = false;
+        private Boolean canReadRecipe = false;
+        private Boolean canUpdateRecipe = false;
+        private Boolean canDeleteRecipe = false;
 
         public PrivilegeBuilder() {}
 
