@@ -12,7 +12,7 @@ export const navLinks = {
   navMain: [
     {
       title: "Inventory",
-      url: "/inventory",
+      url: "/",
       icon: IconPackage,
     },
     {

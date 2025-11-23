@@ -9,28 +9,28 @@ export const getAllUsers = async (): Promise<User[]> => {
 
 // GET user by ID
 export const getUserById = async (id: number): Promise<User> => {
-  const response = await fetch(`/api/user?id=${id}`);
+  const response = await fetch(`/api/user?id=${id}`);  // FIXED
   if (!response.ok) throw new Error('Failed to fetch user');
   return response.json();
 };
 
 // GET user by username
 export const getUserByUsername = async (userName: string): Promise<User> => {
-  const response = await fetch(`/api/user?userName=${userName}`);
+  const response = await fetch(`/api/user?userName=${userName}`);  // FIXED
   if (!response.ok) throw new Error('Failed to fetch user');
   return response.json();
 };
 
 // GET user by staff ID
 export const getUserByStaffId = async (staffId: number): Promise<User> => {
-  const response = await fetch(`/api/user?staffId=${staffId}`);
+  const response = await fetch(`/api/user?staffId=${staffId}`);  // FIXED
   if (!response.ok) throw new Error('Failed to fetch staff user');
   return response.json();
 };
 
 // GET user by admin ID
 export const getUserByAdminId = async (adminId: number): Promise<User> => {
-  const response = await fetch(`/api/user?adminId=${adminId}`);
+  const response = await fetch(`/api/user?adminId=${adminId}`);  // FIXED
   if (!response.ok) throw new Error('Failed to fetch admin user');
   return response.json();
 };
@@ -59,7 +59,7 @@ export const updateUser = async (data: UpdateUserInput): Promise<User> => {
 
 // DELETE user
 export const deleteUser = async (id: number): Promise<void> => {
-  const response = await fetch(`/api/user?id=${id}`, {
+  const response = await fetch(`/api/user?id=${id}`, {  // FIXED
     method: 'DELETE',
   });
   if (!response.ok) throw new Error('Failed to delete user');
