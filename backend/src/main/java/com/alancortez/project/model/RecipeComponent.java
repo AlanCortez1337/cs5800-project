@@ -1,5 +1,6 @@
 package com.alancortez.project.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -12,6 +13,7 @@ public class RecipeComponent {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "recipe_id", nullable = false)
+    @JsonIgnore
     private Recipe recipe;
 
     @ManyToOne(fetch = FetchType.EAGER)

@@ -1,5 +1,6 @@
 package com.alancortez.project.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.util.Date;
 
@@ -13,6 +14,7 @@ public class RecipeUseHistory {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "recipe_id", nullable = false)
+    @JsonIgnore
     private Recipe recipe;
 
     @Temporal(TemporalType.TIMESTAMP)
