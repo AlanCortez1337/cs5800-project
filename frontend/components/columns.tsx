@@ -12,14 +12,14 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Badge } from "@/components/ui/badge"
-import { Ingredient } from "@/lib/types"
+import { Ingredient, Recipe, User } from "@/lib/types"
 
-interface ColumnsProps {
+interface IngredientColumnsProps {
   onEdit: (ingredient: Ingredient) => void;
   onDelete: (id: number) => void;
 }
 
-export const getColumns = ({ onEdit, onDelete }: ColumnsProps): ColumnDef<Ingredient>[] => [
+export const getIngredientColumns = ({ onEdit, onDelete }: IngredientColumnsProps): ColumnDef<Ingredient>[] => [
   {
     accessorKey: "ingredientID",
     header: "ID",

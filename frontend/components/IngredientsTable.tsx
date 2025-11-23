@@ -3,17 +3,29 @@
 import { useState } from 'react';
 import { useIngredients, useDeleteIngredient } from '@/hooks/useIngredients';
 import { DataTable } from '@/components/data-table';
-import { getColumns } from '@/components/columns';
+import { getIngredientColumns } from '@/components/columns';
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
 import { Ingredient } from '@/lib/types';
 import { CreateIngredientDialog } from '@/components/CreateIngredientsDialog';
 import { EditIngredientDialog } from '@/components/EditIngredientsDialog';
 import { toast } from 'sonner';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 
 export default function IngredientsTable() {
   const [selectedIngredient, setSelectedIngredient] = useState<Ingredient | null>(null);
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [ingredientToDelete, setIngredientToDelete] = useState<number | null>(null);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   
   const { data: ingredients, isLoading, error } = useIngredients();
@@ -21,6 +33,8 @@ export default function IngredientsTable() {
   const deleteIngredientMutation = useDeleteIngredient({
     onSuccess: () => {
       toast.success('Ingredient deleted successfully!');
+      setDeleteDialogOpen(false);
+      setIngredientToDelete(null);
     },
     onError: (error) => {
       toast.error(`Failed to update ingredient: ${error.message}`);
@@ -33,8 +47,13 @@ export default function IngredientsTable() {
   };
 
   const handleDelete = (id: number) => {
-    if (confirm('Are you sure you want to delete this ingredient?')) {
-      deleteIngredientMutation.mutate(id);
+    setIngredientToDelete(id);
+    setDeleteDialogOpen(true);
+  };
+
+  const confirmDelete = () => {
+    if (ingredientToDelete) {
+      deleteIngredientMutation.mutate(ingredientToDelete);
     }
   };
 
@@ -58,7 +77,7 @@ export default function IngredientsTable() {
     );
   }
 
-  const columns = getColumns({ onEdit: handleEdit, onDelete: handleDelete });
+  const columns = getIngredientColumns({ onEdit: handleEdit, onDelete: handleDelete });
 
   return (
     <>
@@ -87,6 +106,26 @@ export default function IngredientsTable() {
         onOpenChange={setEditDialogOpen}
         ingredient={selectedIngredient}
       />
+      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete the user
+              and remove their data from the system.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={confirmDelete}
+              className="bg-red-600 hover:bg-red-700"
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </>
   );
 }
