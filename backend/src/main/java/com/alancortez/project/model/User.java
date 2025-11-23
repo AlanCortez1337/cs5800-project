@@ -13,10 +13,10 @@ public abstract class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    protected Long id;
+    protected Integer id;
 
     @Column(name = "username", nullable = false, unique = true)
-    protected String username;
+    protected String userName;
 
     // Use caution when storing plain passwords in production systems.
     @Column(name = "password", nullable = false)
@@ -33,17 +33,17 @@ public abstract class User {
     protected Date dateCreated;
 
     public User(String userName, String password, USER_ROLE role) {
-        this.username = userName;
+        this.userName = userName;
         this.password = password;
         this.role = role;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
     public String getUsername() {
-        return username;
+        return userName;
     }
 
     public String getPassword() {
@@ -55,7 +55,7 @@ public abstract class User {
     }
 
     public void setUsername(String username) {
-        this.username = username;
+        this.userName = username;
     }
 
     public void setPassword(String password) {

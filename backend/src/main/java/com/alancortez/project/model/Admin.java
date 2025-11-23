@@ -6,14 +6,14 @@ import com.alancortez.project.utils.USER_ROLE;
 import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
 import java.util.Date;
+import java.util.UUID;
 
 @Entity
 @Table(name = "admin")
 @NoArgsConstructor
 public class Admin extends User {
     @Column(name = "admin_id", unique = true, nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long adminID;
+    private String adminID;
 
     public Admin(
             String username,
@@ -21,13 +21,14 @@ public class Admin extends User {
             USER_ROLE role
     ) {
         super(username, password, role);
+        this.adminID = UUID.randomUUID().toString();
     }
 
-    public Long getAdminID() {
+    public String getAdminID() {
         return adminID;
     }
 
-    public void setPrivilege(PRIVILEGES privilegeToUpdate, Long staffID) {
+    public void setPrivilege(PRIVILEGES privilegeToUpdate, String staffID) {
         UserService userService = new UserService();
 
         Staff staff = (Staff) userService.getUserByStaffID(staffID);
