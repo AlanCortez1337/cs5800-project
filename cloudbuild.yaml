@@ -1,0 +1,13 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/cs5800-project-frontend', '-f', 'Dockerfile.nextjs', '.']
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/cs5800-project-frontend']
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args:
+      - 'run'
+      - 'deploy'
+      - 'cs5800-project-frontend'
+      - '--image=gcr.io/$PROJECT_ID/cs5800-project-frontend'
+      - '--region=us-west2'
+      - '--platform=managed'
