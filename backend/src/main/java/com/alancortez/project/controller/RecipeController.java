@@ -42,11 +42,7 @@ public class RecipeController {
     public ResponseEntity<Recipe> updateRecipe(@PathVariable Integer id, @RequestBody Recipe recipeDetails) {
         Recipe recipe = recipeService.getRecipeById(id);
         if (recipe != null) {
-            recipe.setRecipeName(recipeDetails.getRecipeName());
-            recipe.setRecipeComponents(recipeDetails.getRecipeComponents());
-            recipe.setUseCount(recipeDetails.getUseCount());
-            recipe.setUseHistory(recipeDetails.getUseHistory());
-            return ResponseEntity.ok(recipeService.createRecipe(recipe));
+            return ResponseEntity.ok(recipeService.updateRecipe(id, recipeDetails));
         }
         return ResponseEntity.notFound().build();
     }
