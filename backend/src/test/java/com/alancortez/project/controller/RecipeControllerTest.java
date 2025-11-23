@@ -24,7 +24,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class RecipeControllerTest {
+public class RecipeControllerTest {
 
     @Mock
     private RecipeService recipeService;
