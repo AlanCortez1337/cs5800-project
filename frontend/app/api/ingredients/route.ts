@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-const SPRING_BOOT_API = process.env.SPRING_BOOT_API_URL || 'http://app:8080';
+const SPRING_BOOT_API = process.env.SPRING_BOOT_API_URL || 'http://localhost:8080';
 
 // GET all ingredients or ingredient by ID
 export async function GET(request: NextRequest) {

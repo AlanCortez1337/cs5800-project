@@ -1,0 +1,14 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '--build-arg'
+      - 'SPRING_BOOT_API_URL=${_SPRING_BOOT_API_URL}'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/frontend'
+      - '-f'
+      - 'Dockerfile'
+      - '.'
+images:
+  - 'gcr.io/$PROJECT_ID/frontend'
+timeout: 1200s
