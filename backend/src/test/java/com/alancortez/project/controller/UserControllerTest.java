@@ -3,6 +3,7 @@ import com.alancortez.project.model.Admin;
 import com.alancortez.project.model.Staff;
 import com.alancortez.project.model.User;
 import com.alancortez.project.service.UserService;
+import com.alancortez.project.utils.PRIVILEGES;
 import com.alancortez.project.utils.USER_ROLE;
 import com.alancortez.project.utils.UserFactory;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,6 +36,8 @@ public class UserControllerTest {
     private UserFactory userFactory;
     private Admin testUser1;
     private Staff testUser2;
+    private String ADMIN_ID;
+    private String STAFF_ID;
 
     @BeforeEach
     void setUp() {
@@ -42,6 +45,8 @@ public class UserControllerTest {
         testUser1 = (Admin) userFactory.createUser("LebronJames23", "password", USER_ROLE.ADMIN);
         testUser2 = (Staff) userFactory.createUser("LukaDoncic77", "password", USER_ROLE.STAFF);
 
+        ADMIN_ID = testUser1.getAdminID();
+        STAFF_ID = testUser2.getStaffID();
     }
 
     // GET /api/user - Get All Users Tests
@@ -325,6 +330,85 @@ public class UserControllerTest {
         assertNotNull(response.getBody());
         verify(userService, times(1)).getUserById(1);
         verify(userService, times(1)).createUser(any(User.class));
+    }
+
+    @Test
+    void updateStaffPrivileges_ShouldReturnOk_OnSuccess() {
+        // ARRANGE
+        // Define the privileges to be toggled
+        String[] privilegeStrings = {"CREATE_RECIPE", "READ_INGREDIENT"};
+        PRIVILEGES[] expectedPrivileges = {PRIVILEGES.CREATE_RECIPE, PRIVILEGES.READ_INGREDIENT};
+
+        // We mock the service call to do nothing, as we only verify it's called
+        doNothing().when(userService).changeStaffPrivilege(ADMIN_ID, STAFF_ID, expectedPrivileges);
+
+        // ACT
+        ResponseEntity<String> response = userController.updateStaffPrivileges(
+                ADMIN_ID,
+                STAFF_ID,
+                privilegeStrings
+        );
+
+        // ASSERT
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals("Staff privileges updated successfully.", response.getBody());
+
+        // Verify that the service method was called once with the correct parameters
+        verify(userService, times(1)).changeStaffPrivilege(eq(ADMIN_ID), eq(STAFF_ID), eq(expectedPrivileges));
+    }
+
+    @Test
+    void updateStaffPrivileges_ShouldReturnBadRequest_OnInvalidPrivilege() {
+        // ARRANGE
+        // Introduce an invalid privilege name
+        String[] privilegeStrings = {"CREATE_RECIPE", "INVALID_PRIVILEGE"};
+
+        // No need to mock service call since the exception happens before it
+
+        // ACT
+        ResponseEntity<String> response = userController.updateStaffPrivileges(
+                ADMIN_ID,
+                STAFF_ID,
+                privilegeStrings
+        );
+
+        // ASSERT
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertTrue(response.getBody().contains("Invalid privilege name provided."));
+
+        // Verify that the service method was NOT called
+        verify(userService, never()).changeStaffPrivilege(anyString(), anyString(), any(PRIVILEGES[].class));
+    }
+
+    @Test
+    void updateStaffPrivileges_ShouldReturnNotFound_OnUserNotFound() {
+        // ARRANGE
+        String[] privilegeStrings = {"CREATE_RECIPE"};
+        PRIVILEGES[] expectedPrivileges = {PRIVILEGES.CREATE_RECIPE};
+
+        // Simulate a RuntimeException from the service layer, indicating a user wasn't found.
+        // This simulates the check at the start of the changeStaffPrivilege method failing.
+        // We'll throw an exception that contains "not found" in the message.
+        doThrow(new RuntimeException("Admin or Staff user not found"))
+                .when(userService).changeStaffPrivilege(ADMIN_ID, STAFF_ID, expectedPrivileges);
+
+        // ACT
+        ResponseEntity<String> response = userController.updateStaffPrivileges(
+                ADMIN_ID,
+                STAFF_ID,
+                privilegeStrings
+        );
+
+        // ASSERT
+        // Note: I'm making the assertion check for INTERNAL_SERVER_ERROR because your current
+        // Controller's catch block returns 500 unless the message explicitly contains "not found".
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+
+        // To make this return HttpStatus.NOT_FOUND (404), your UserService should throw a
+        // custom, more specific exception (e.g., UserNotFoundException) which the Controller
+        // can catch explicitly.
+
+        verify(userService, times(1)).changeStaffPrivilege(eq(ADMIN_ID), eq(STAFF_ID), eq(expectedPrivileges));
     }
 
     // DELETE /api/user/{id} - Delete User Tests

@@ -2,9 +2,11 @@ package com.alancortez.project.controller;
 
 import com.alancortez.project.model.User;
 import com.alancortez.project.service.UserService;
+import com.alancortez.project.utils.PRIVILEGES;
 import com.alancortez.project.utils.USER_ROLE;
 import com.alancortez.project.utils.UserFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -93,6 +95,37 @@ public class UserController {
             return ResponseEntity.ok(userService.createUser(user));
         }
         return ResponseEntity.notFound().build();
+    }
+
+    @PutMapping("/privilege/{adminID}/{staffID}")
+    public ResponseEntity<String> updateStaffPrivileges(
+            @PathVariable String adminID,
+            @PathVariable String staffID,
+            @RequestBody String[] privilegesToToggle
+    ) {
+        // Map the array of privilege strings from the request body to the PRIVILEGES enum array
+        PRIVILEGES[] privilegeEnums;
+        try {
+            privilegeEnums = new PRIVILEGES[privilegesToToggle.length];
+            for (int i = 0; i < privilegesToToggle.length; i++) {
+                privilegeEnums[i] = PRIVILEGES.valueOf(privilegesToToggle[i].toUpperCase());
+            }
+        } catch (IllegalArgumentException e) {
+            // Handle case where an invalid privilege name is sent
+            return new ResponseEntity<>("Invalid privilege name provided.", HttpStatus.BAD_REQUEST);
+        }
+
+        try {
+            userService.changeStaffPrivilege(adminID, staffID, privilegeEnums);
+            return new ResponseEntity<>("Staff privileges updated successfully.", HttpStatus.OK);
+        } catch (RuntimeException e) {
+            // Catch specific exceptions from the service layer (e.g., UserNotFoundException)
+            // For now, using a generic catch to demonstrate the service call.
+            if (e.getMessage() != null && e.getMessage().contains("not found")) {
+                return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+            }
+            return new ResponseEntity<>("Failed to update privileges: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     // DELETE /apiuser/{id}

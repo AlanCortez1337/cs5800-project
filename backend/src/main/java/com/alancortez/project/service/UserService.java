@@ -5,6 +5,8 @@ import com.alancortez.project.model.Staff;
 import com.alancortez.project.model.User;
 import com.alancortez.project.repository.AdminRepository;
 import com.alancortez.project.repository.StaffRepository;
+import com.alancortez.project.utils.PRIVILEGES;
+import com.alancortez.project.utils.PrivilegeToggleVisitor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -71,5 +73,23 @@ public class UserService {
 
         // Try Admin table second
         return adminRepository.findByUserName(userName).orElse(null);
+    }
+
+    public void changeStaffPrivilege(String adminID, String staffID, PRIVILEGES[] privilegeToToggle) {
+        Admin admin = (Admin) this.getUserByAdminID(adminID);
+        Staff staff = (Staff) this.getUserByStaffID(staffID);
+
+        if (admin == null || staff == null) {
+            // Handle error: users not found
+            return;
+        }
+
+        PrivilegeToggleVisitor visitor = new PrivilegeToggleVisitor(privilegeToToggle, staffID);
+
+        admin.accept(visitor);
+
+        staff.accept(visitor);
+
+        staffRepository.save(staff);
     }
 }

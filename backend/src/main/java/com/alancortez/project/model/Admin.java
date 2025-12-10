@@ -3,6 +3,7 @@ package com.alancortez.project.model;
 import com.alancortez.project.service.UserService;
 import com.alancortez.project.utils.PRIVILEGES;
 import com.alancortez.project.utils.USER_ROLE;
+import com.alancortez.project.utils.UserActionVisitor;
 import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
 import java.util.Date;
@@ -28,15 +29,7 @@ public class Admin extends User {
         return adminID;
     }
 
-    public void setPrivilege(PRIVILEGES privilegeToUpdate, String staffID) {
-        UserService userService = new UserService();
-
-        Staff staff = (Staff) userService.getUserByStaffID(staffID);
-
-        if (staff != null) {
-            this.dateUpdated = new Date();
-            staff.togglePrivilege(privilegeToUpdate, this.getAdminID());
-        }
-
+    public void accept(UserActionVisitor visitor) {
+        visitor.visit(this);
     }
 }

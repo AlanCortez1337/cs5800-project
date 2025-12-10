@@ -3,6 +3,7 @@ package com.alancortez.project.model;
 import com.alancortez.project.service.UserService;
 import com.alancortez.project.utils.PRIVILEGES;
 import com.alancortez.project.utils.USER_ROLE;
+import com.alancortez.project.utils.UserActionVisitor;
 import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor; // Recommended for easier object creation
@@ -31,44 +32,19 @@ public class Staff extends User {
         this.staffID = UUID.randomUUID().toString();
     }
 
-    public void togglePrivilege(PRIVILEGES privilegeToUpdate, String adminID) {
-        UserService userService = new UserService();
+    public Privilege getPrivilege() { return this.privilege; }
+    public void setPrivilege(Privilege privilege) {
+        this.privilege = privilege;
+    }
 
-        User admin = userService.getUserByAdminID(adminID);
-
-        if (admin != null) {
-            switch(privilegeToUpdate) {
-                case CREATE_RECIPE:
-                    this.privilege.setCanCreateRecipe(!this.privilege.getCanCreateRecipe());
-                    break;
-                case READ_RECIPE:
-                    this.privilege.setCanReadRecipe(!this.privilege.getCanReadRecipe());
-                    break;
-                case UPDATE_RECIPE:
-                    this.privilege.setCanUpdateRecipe(!this.privilege.getCanUpdateRecipe());
-                    break;
-                case DELETE_RECIPE:
-                    this.privilege.setCanDeleteRecipe(!this.privilege.getCanDeleteRecipe());
-                    break;
-                case CREATE_INGREDIENT:
-                    this.privilege.setCanCreateIngredient(!this.privilege.getCanCreateIngredient());
-                    break;
-                case READ_INGREDIENT:
-                    this.privilege.setCanReadIngredient(!this.privilege.getCanReadIngredient());
-                    break;
-                case UPDATE_INGREDIENT:
-                    this.privilege.setCanUpdateIngredient(!this.privilege.getCanUpdateIngredient());
-                    break;
-                case DELETE_INGREDIENT:
-                    this.privilege.setCanDeleteIngredient(!this.privilege.getCanDeleteIngredient());
-                    break;
-            }
-            this.dateUpdated = new Date();
-        }
-
+    public void accept(UserActionVisitor visitor) {
+        visitor.visit(this);
     }
 
     public String getStaffID() {
         return staffID;
+    }
+    public void setDateUpdated() {
+        this.dateUpdated = new Date();
     }
 }

@@ -23,7 +23,6 @@ abstract User {
     # password: String
     # role: UserRole
     # dateCreated: Date
-    - privilege: Privilege
 
     + getID(): Integer
     + setID(id: Integer): void
@@ -34,7 +33,7 @@ abstract User {
     + getRole(): UserRole
     + setRole(role: UserRole): void
     + getDateCreated(): Date
-    + getPrivilege(): Privilege
+    + accept(UserActionVisitor visitor): void
 }
 
 class Privilege {
@@ -93,25 +92,49 @@ Privilege +-- PrivilegeBuilder
 
 class Staff {
     - staffID: Integer
+    - privilege: Privilege
 
+    + getPrivilege(): Privilege
+    + setPrivilege(privilege: Privilege): void
     + getStaffID(): Integer
-    + togglePrivilege(privilegeToUpdate: PRIVILEGES, adminID: String): void
+    + accept(UserActionVisitor visitor): void
+    + setDateUpdated(): void
 }
 
 class Admin {
     - adminID: Integer
 
     + getAdminID(): Integer
-    + setPrivilege(privilegeToUpdate: PRIVILEGES, staffID: String): void
+    + accept(UserActionVisitor visitor): void
 }
 
-class UserFactory() {
+class UserFactory {
     - {static} instance: UserFactory
     + {static} getInstance(): UserFactory
 
     + getUserType(role: UserRole)
     + createNewUser(userName: String, password: String, role: UserRole)
 }
+
+UserFactory *-- UserFactory
+
+interface UserActionVisitor {
+    + visit(staff: Staff): void
+    + visit(admin: Admin): void
+}
+
+class PrivilegeToggleVisitor {
+    - privilegesToToggle: PRIVILEGES[]
+    - targetStaffID: String
+    - actingAdmin: Admin
+
+    + PrivilegeToggleVisitor(privilegesToToggle: PRIVILEGES[], targetStaffID: String): void
+
+    + void visit(staff: Staff)
+    + void visit(admin: Admin)
+}
+
+PrivilegeToggleVisitor ..|> UserActionVisitor
 
 Staff *-- Privilege
 User <|-- Staff
