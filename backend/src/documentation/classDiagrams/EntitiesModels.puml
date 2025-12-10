@@ -39,6 +39,17 @@ class IngredientUnit {
     + setUnitOfMeasurement(unit: String): void
 }
 
+class IngredientUnitFactory {
+    - {static} instance: IngredientUnitFactory
+    + {static} getInstance(): IngredientUnitFactory
+
+    - ingredientUnits: HashMap<String, IngredientUnit>
+    + getIngredientUnit(pricePerUnit: double, unitOfMeasurement: String): IngredientUnit
+}
+
+IngredientUnitFactory *-- IngredientUnitFactory
+IngredientUnitFactory *-- IngredientUnit
+
 class IngredientStorageRequirement {
     - currentQuantity: double
     - maxQuantityLimit: double

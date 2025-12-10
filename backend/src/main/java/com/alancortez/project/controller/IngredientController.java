@@ -1,7 +1,9 @@
 package com.alancortez.project.controller;
 
 import com.alancortez.project.model.Ingredient;
+import com.alancortez.project.model.IngredientUnit;
 import com.alancortez.project.service.IngredientService;
+import com.alancortez.project.utils.IngredientUnitFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -43,7 +45,12 @@ public class IngredientController {
         Ingredient ingredient = ingredientService.getIngredientById(id);
         if (ingredient != null) {
             ingredient.setProductName(ingredientDetails.getProductName());
-            ingredient.setUnitDetails(ingredientDetails.getUnitDetails());
+
+            Double pricePerUnit = ingredientDetails.getUnitDetails().getPricePerUnit();
+            String unitOfMeasurement = ingredientDetails.getUnitDetails().getUnitOfMeasurement();
+            IngredientUnit ingredientUnit = IngredientUnitFactory.getInstance().getIngredientUnit(pricePerUnit, unitOfMeasurement);
+
+            ingredient.setUnitDetails(ingredientUnit);
             ingredient.setQuantityDetails(ingredientDetails.getQuantityDetails());
             return ResponseEntity.ok(ingredientService.createIngredient(ingredient));
         }
