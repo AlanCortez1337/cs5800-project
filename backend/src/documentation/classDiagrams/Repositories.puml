@@ -1,49 +1,40 @@
 @startuml
-    interface JpaRepository<T,ID> {
-      + save(entity: T): T
-      + findById(id: ID): Optional<T>
-      + findAll(): List<T>
-      + deleteById(id: ID): void
-      + count(): long
+    interface JpaRepository<T, ID> extends JavaInterface
+
+    interface AdminRepository extends JpaRepository<Admin, Integer> {
+        + findByAdminID(adminID: String) : Optional<Admin>
+        + findByUserName(userName: String) : Optional<Admin>
     }
 
-    interface UserRepository<User, Long> {
-      + findByUserName(userName: String): Optional<User>
-      + findByStaffID(staffID: Long): Optional<User>
-      + findByAdminID(adminID: Long): Optional<User>
+    interface IngredientRepository extends JpaRepository<Ingredient, Integer> {
+        + findByProductName(productName: String) : Optional<Ingredient>
     }
 
-    interface IngredientRepository<Ingredient, Long> {
-      + findByProductName(productName: String): Optional<Ingredient>
+    interface RecipeRepository extends JpaRepository<Recipe, Integer> {
+        + findByRecipeName(recipeName: String) : Optional<Recipe>
     }
 
-    interface RecipeRepository<Recipe, Long> {
-      + findByRecipeName(recipeName: String): Optional<Recipe>
+    interface StaffRepository extends JpaRepository<Staff, Integer> {
+        + findByStaffID(staffID: String) : Optional<Staff>
+        + findByUserName(userName: String) : Optional<Staff>
     }
 
-    interface ReportRepository<Report, Long> {
-      + findByReportTitle(reportTitle: String): Optional<Report>
+    interface ReportRepository extends JpaRepository<Report, Long> {
+        + findByReportType(reportType: ReportType) : List<Report>
+        + findByReportTypeAndTimestampBetween(reportType: ReportType, start: LocalDateTime, end: LocalDateTime) : List<Report>
+
+        + findByDateRange(start: LocalDateTime, end: LocalDateTime) : List<Report> <<Query>>
+        + getReportSummary(start: LocalDateTime, end: LocalDateTime) : List<Object[]> <<Query>>
+        + getTopEntitiesByType(type: ReportType, start: LocalDateTime, end: LocalDateTime) : List<Object[]> <<Query>>
+        + getTimeSeriesData(type: ReportType, start: LocalDateTime, end: LocalDateTime) : List<Object[]> <<Query>>
+        + countByTypeAndDateRange(type: ReportType, start: LocalDateTime, end: LocalDateTime) : Long <<Query>>
+        + findDistinctEntityNamesByType(type: ReportType) : List<String> <<Query>>
     }
 
-
-    JpaRepository <|-- UserRepository
-    UserRepository ..> User : uses
-    UserRepository ..> "Optional<User>" : returns
-
-    JpaRepository <|-- IngredientRepository
-    IngredientRepository ..> Ingredient : uses
-    IngredientRepository ..> "Optional<Ingredient>" : returns
-
-    JpaRepository <|-- RecipeRepository
-    RecipeRepository ..> Recipe : uses
-    RecipeRepository ..> "Optional<Recipe>" : returns
-
-    JpaRepository <|-- ReportRepository
-    ReportRepository ..> Report : uses
-    ReportRepository ..> "Optional<Report>" : returns
-
-    note right of JpaRepository
-      Use Java Springboot JPA interface
-    end note
+    AdminRepository --|> JpaRepository
+    IngredientRepository --|> JpaRepository
+    RecipeRepository --|> JpaRepository
+    StaffRepository --|> JpaRepository
+    ReportRepository --|> JpaRepository
 
 @enduml

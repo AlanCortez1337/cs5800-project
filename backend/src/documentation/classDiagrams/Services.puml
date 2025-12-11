@@ -1,42 +1,55 @@
 @startuml
 
-class UserService {
-    - userRepository: UserRepository
-
-    + createUser(user: User): User
-    + getAllUser(users: List<User>): List<User>
-    + getUserByID(id: Long): User
-    + getUserByUsername(userName: String): User
-    + getUserByStaffID(id: Long): User
-    + getUserByAdminID(id: Long): User
-
-}
-
 class IngredientService {
-    - ingredientRepository: IngredientRepository
+    - ingredientRepository : IngredientRepository
 
-    + createIngredient(ingredients: Ingredient): Ingredient
-    + getAllIngredients(ingredients: List<Ingredient>): List<Ingredient>
-    + getIngredientByID(id: Long): Ingredient
-    + getIngredientByProductName(id: Long): Ingredient
+    + createIngredient(ingredient: Ingredient) : Ingredient
+    + getAllIngredients() : List<Ingredient>
+    + getIngredientById(id: Integer) : Ingredient
+    + deleteIngredient(id: Integer) : void
+    + getIngredientByProductName(productName: String) : Ingredient
 }
 
 class RecipeService {
-    - recipeRepository: RecipeRepository
+    - recipeRepository : RecipeRepository
 
-    + createRecipe(recipe: Recipe): User
-    + getAllRecipes(recipes: List<Recipe>): List<Recipe>
-    + getRecipeByID(id: Long): Recipe
-    + getRecipeByRecipeName(id: Long): Recipe
+    + updateRecipe(recipeId: Integer, incomingRecipe: Recipe) : Recipe <<Transactional>>
+    + createRecipe(recipe: Recipe) : Recipe
+    + getAllRecipes() : List<Recipe>
+    + getRecipeById(id: Integer) : Recipe
+    + deleteRecipe(id: Integer) : void
+    + getIngredientByRecipeName(recipeName: String) : Recipe
 }
 
 class ReportService {
-    - reportRepository: ReportRepository
+    - reportRepository : ReportRepository
 
-    + createReport(report: Report): Report
-    + getAllReports(reports: List<Report>): List<Report>
-    + getReportByID(id: Long): Report
-    + getReportByReportTitle(id: Long): Report
+    + createReport(type: ReportType, id: Long, name: String) : Report <<Transactional>>
+    + createReports(reports: List<Report>) : List<Report> <<Transactional>>
+    + getAllReports() : List<Report>
+    + getReportsByType(reportType: ReportType) : List<Report>
+    + getReportsByDateRange(start: LocalDateTime, end: LocalDateTime) : List<Report>
+    + getReportsByTypeAndDateRange(type: ReportType, start: LocalDateTime, end: LocalDateTime) : List<Report>
+    + getReportSummary(start: LocalDateTime, end: LocalDateTime) : Map<String, Object>
+    + getChartData(type: ReportType, start: LocalDateTime, end: LocalDateTime, groupBy: String) : List<Map<String, Object>>
+    + getTopEntities(type: ReportType, start: LocalDateTime, end: LocalDateTime, limit: int) : List<Map<String, Object>>
+    + getDashboardData(start: LocalDateTime, end: LocalDateTime) : Map<String, Object>
+    + getComparisonData(type: ReportType, currentStart: LocalDateTime, currentEnd: LocalDateTime, previousStart: LocalDateTime, previousEnd: LocalDateTime) : Map<String, Object>
+    + deleteReportsOlderThan(cutoffDate: LocalDateTime) : void <<Transactional>>
+}
+
+class UserService {
+    - adminRepository : AdminRepository
+    - staffRepository : StaffRepository
+
+    + createUser(user: User) : User
+    + getAllUsers() : List<User>
+    + getUserById(id: Integer) : User
+    + getUserByStaffID(staffID: String) : User
+    + getUserByAdminID(adminID: String) : User
+    + deleteUser(id: Integer) : void
+    + getUserByUserName(userName: String) : User
+    + changeStaffPrivilege(adminID: String, staffID: String, privilegeToToggle: PRIVILEGES[]) : void
 }
 
 @enduml

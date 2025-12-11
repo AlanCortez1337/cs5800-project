@@ -1,7 +1,7 @@
 @startuml
 'https://plantuml.com/class-diagram
 
-enum DATA_POINTS {
+enum ReportType {
     RECIPE_USED
     INGREDIENT_USED
     TIMES_INGREDIENT_REACHED_LOW
@@ -119,21 +119,27 @@ Recipe *-- RecipeUseHistory
 RecipeComponent o-- Ingredient
 
 class Report {
-    - reportID: String
-    - reportTitle: String
-    - dataPoints: DATA_POINTS
-    - ingredientsData: Ingredient[]
-    - recipeData: Recipe[]
+    - id : Long
+    - reportType : ReportType
+    - entityId : Long
+    - entityName : String
+    - timestamp : LocalDateTime
+    - count : Integer
 
-    + getReportID(): String
-    + getReportTitle(): String
-    + setReportTitle(newTitle: String): void
-    + getDataPoints(): DATA_POINTS
-    + setDataPoints(points: DATA_POINTS): void
-    + getIngredientsData(): Ingredient[]
-    + setIngredientsData(data: Ingredient[]): void
-    + getRecipeData(): Recipe[]
-    + setRecipeData(data: Recipe[]): void
+    + Report(reportType: ReportType, entityId: Long, entityName: String)
+
+    + getId() : Long
+    + setId(id: Long) : void
+    + getReportType() : ReportType
+    + setReportType(reportType: ReportType) : void
+    + getEntityId() : Long
+    + setEntityId(entityId: Long) : void
+    + getEntityName() : String
+    + setEntityName(entityName: String) : void
+    + getTimestamp() : LocalDateTime
+    + setTimestamp(timestamp: LocalDateTime) : void
+    + getCount() : Integer
+    + setCount(count: Integer) : void
 }
 
 Report o-- Ingredient

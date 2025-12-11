@@ -9,10 +9,10 @@ public class CorsConfiguration implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**") // Apply CORS configuration to all paths
-                .allowedOrigins("http://localhost:3000") // ⬅️ IMPORTANT: Allow your Next.js origin
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // Allow these HTTP methods
-                .allowedHeaders("*") // Allow all headers
-                .allowCredentials(true); // Allow cookies/authentication headers
+        registry.addMapping("/**")
+                .allowedOrigins("http://localhost:3000")
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                .allowedHeaders("*")
+                .allowCredentials(true);
     }
 }

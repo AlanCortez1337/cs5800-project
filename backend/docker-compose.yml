@@ -39,20 +39,20 @@ services:
     networks:
       - app-network
 
-  nextjs:
-    build:
-      context: ../frontend  # Adjust this path to your Next.js app directory
-      dockerfile: Dockerfile
-    container_name: nextjs_app
-    depends_on:
-      - app
-    environment:
-      API_URL: http://app:8080
-      NEXT_PUBLIC_API_URL: http://app:8080
-    ports:
-      - "3000:3000"
-    networks:
-      - app-network
+#  nextjs:
+#    build:
+#      context: ../frontend  # Adjust this path to your Next.js app directory
+#      dockerfile: Dockerfile
+#    container_name: nextjs_app
+#    depends_on:
+#      - app
+#    environment:
+#      API_URL: http://app:8080
+#      NEXT_PUBLIC_API_URL: http://app:8080
+#    ports:
+#      - "3000:3000"
+#    networks:
+#      - app-network
 
 volumes:
   postgres_data:

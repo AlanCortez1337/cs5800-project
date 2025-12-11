@@ -1,49 +1,86 @@
 @startuml
 
-class UserController {
-    - userService: UserService
+class UserController extends JavaController {
+    - userService : UserService
 
-    + getAllUsers(): List<User>
-    + getUserByUserID(id: Long): User
-    + getUserByStaffID(id: Long): User
-    + getUserByAdminID(id: Long): User
-    + getUserByUsername(userName: String): User
-    + createUser(user: User): User
-    + updateUser(id: Long, userDetails: User): ResponseEntity<User>
-    + deleteUser(id: Long): ResponseEntity<void>
+    + getAllUsers() : List<User>
+    + getUserById(id: Integer) : ResponseEntity<User>
+    + getUserByUserName(userName: String) : ResponseEntity<User>
+    + getUserByStaffID(staffID: String) : ResponseEntity<User>
+    + getUserByAdminID(adminID: String) : ResponseEntity<User>
+    + createUser(request: Map<String, String>) : User
+    + updateUser(id: Integer, request: Map<String, String>) : ResponseEntity<User>
+    + updateStaffPrivileges(adminID: String, staffID: String, privilegesToToggle: String[]) : ResponseEntity<String>
+    + deleteUser(id: Integer) : ResponseEntity<Void>
 }
 
 class IngredientController {
-    - ingredientService: IngredientService
+    - ingredientService : IngredientService
 
-    + getAllIngredients(): List<Ingredient>
-    + getIngredientByID(id: Long): Ingredient
-    + getIngredientByProductName(productName: String): Ingredient
-    + createIngredient(ingredient: Ingredient): Ingredient
-    + updateIngredient(id: Long, ingredientDetails: Ingredient): ResponseEntity<Ingredient>
-    + deleteIngredient(id: Long): ResponseEntity<void>
+    + getAllIngredients() : List<Ingredient>
+    + getIngredientById(id: Integer) : ResponseEntity<Ingredient>
+    + createIngredient(ingredient: Ingredient) : Ingredient
+    + updateIngredient(id: Integer, ingredientDetails: Ingredient) : ResponseEntity<Ingredient>
+    + deleteIngredient(id: Integer) : ResponseEntity<Void>
 }
 
 class RecipeController {
-    - recipeService: RecipeService
+    - recipeService : RecipeService
 
-    + getAllRecipes(): List<Recipe>
-    + getRecipeByID(id: Long): Recipe
-    + getRecipeByRecipeName(recipeName: String): Recipe
-    + createRecipe(recipe: Recipe): Recipe
-    + updateRecipe(id: Long, recipeDetails: Recipe): ResponseEntity<Recipe>
-    + deleteRecipe(id: Long): ResponseEntity<void>
+    + getAllRecipes() : List<Recipe>
+    + getRecipeById(id: Integer) : ResponseEntity<Recipe>
+    + createRecipe(recipe: Recipe) : Recipe
+    + updateRecipe(id: Integer, recipeDetails: Recipe) : ResponseEntity<Recipe>
+    + deleteRecipe(id: Integer) : ResponseEntity<Void>
 }
 
 class ReportController {
     - reportService: ReportService
 
-    + getAllReports(): List<Report>
-    + getReportByID(id: Long): Report
-    + getReportByReportTitle(reportTitle: String): Report
-    + createReport(report: Report): Report
-    + updateReport(id: Long, reportDetails: Report): ResponseEntity<Report>
-    + deleteReport(id: Long): ResponseEntity<void>
+    + createReport(request: ReportRequest): ResponseEntity<Report>
+    + getAllReports(): ResponseEntity<List<Report>>
+    + getReportsByType(reportType: ReportType): ResponseEntity<List<Report>>
+    + getReportsByDateRange(start: LocalDateTime, end: LocalDateTime): ResponseEntity<List<Report>>
+    + getReportSummary(start: LocalDateTime, end: LocalDateTime): ResponseEntity<Map<String, Object>>
+    + getChartData(groupBy: String, start: LocalDateTime, end: LocalDateTime): ResponseEntity<List<Map<String, Object>>>
+    + getTopEntities(reportType: ReportType. limit: int, start: LocalDateTime, end: LocalDateTime): ResponseEntity<List<Map<String, Object>>>
+    + getDashboardData(start: LocalDateTime, end: LocalDateTime): ResponseEntity<Map<String, Object>>
+}
+
+class ReportRequest {
+    - reportType: ReportType
+    - entityId: Long
+    - entityName: String
+
+    + getReportType(): ReportType
+    + setReportType(reportType: ReportType): void
+    + getEntityId(): Long
+    + setEntityId(entityId: Long): void
+    + getEntityName(): String
+    + setEntityName(entityName: String): void
+
+}
+
+ReportController +-- ReportRequest
+
+class AuthController {
+    - userService: UserService
+
+    + login(credentials: @RequestBody Map<String, String>, session: HttpSession): ResponseEntity<Map<String, Object>>
+    + logout(session: HttpSession): ResponseEntity<Map<String, Object>>
+    + checkSession(session: HttpSession): ResponseEntity<Map<String, Object>>
+}
+
+class SeedDataController extends JavaController {
+    - reportRepository : ReportRepository
+    - userService : UserService
+
+    + SeedDataController()
+    + seedReports() : ResponseEntity<String>
+    + clearReports() : ResponseEntity<String>
+    + seedUsers() : ResponseEntity<String>
+    + clearUsers() : ResponseEntity<String>
+    + seedAll() : ResponseEntity<String>
 }
 
 @enduml
