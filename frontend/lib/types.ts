@@ -86,3 +86,52 @@ export interface UpdateIngredientInput {
   unitDetails?: UnitDetails;
   quantityDetails?: QuantityDetails;
 }
+
+export type ReportType =
+  | 'RECIPE_USED'
+  | 'INGREDIENT_USED'
+  | 'TIMES_INGREDIENT_REACHED_LOW'
+  | 'RECIPES_CREATED'
+  | 'INGREDIENTS_CREATED';
+
+export interface Report {
+  id: number;
+  reportType: ReportType;
+  entityId: number;
+  entityName: string;
+  timestamp: string;
+  count: number;
+}
+
+export interface ChartDataPoint {
+  date: string;
+  count: number;
+}
+
+export interface TopEntity {
+  name: string;
+  id: number;
+  count: number;
+}
+
+export interface DashboardData {
+  summary: Record<string, number>;
+  topRecipes: TopEntity[];
+  topIngredients: TopEntity[];
+  lowStockCount: number;
+  recipesCreatedCount: number;
+  ingredientsCreatedCount: number;
+}
+
+export interface User {
+  id: number;
+  userName: string;
+  role: "ADMIN" | "STAFF";
+}
+
+export interface AuthContextType {
+  user: User | null;
+  login: (userName: string, password: string) => Promise<boolean>;
+  logout: () => Promise<void>;
+  loading: boolean;
+}

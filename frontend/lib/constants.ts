@@ -1,7 +1,8 @@
 import {
   IconPackage,
   IconBowlSpoonFilled,
-  IconUsersGroup
+  IconUsersGroup,
+  IconChartBarPopular
 } from "@tabler/icons-react"
 
 export const navLinks = {
@@ -12,19 +13,23 @@ export const navLinks = {
   navMain: [
     {
       title: "Inventory",
-      url: "/",
+      url: "/dashboard",
       icon: IconPackage,
     },
     {
       title: "Recipes",
-      url: "/recipes",
+      url: "/dashboard/recipes",
       icon: IconBowlSpoonFilled,
     },
     {
       title: "Staff",
-      url: "/staff",
+      url: "/dashboard/staff",
       icon: IconUsersGroup,
     },
-    
+    {
+      title: "Reports",
+      url: "/dashboard/reports",
+      icon: IconChartBarPopular,
+    },
   ],
 }
