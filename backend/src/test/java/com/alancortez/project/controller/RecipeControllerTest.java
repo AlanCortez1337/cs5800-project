@@ -45,25 +45,19 @@ public class RecipeControllerTest {
 
     @BeforeEach
     void setUp() {
-        // Setup ingredients
         ingredient1 = new Ingredient();
         ingredient1.setProductName("Flour");
-
         ingredient2 = new Ingredient();
         ingredient2.setProductName("Sugar");
-
         ingredient3 = new Ingredient();
         ingredient3.setProductName("Eggs");
-
         ingredient4 = new Ingredient();
         ingredient4.setProductName("Butter");
 
-        // Setup recipe 1
         testRecipe1 = new Recipe();
         testRecipe1.setRecipeName("Chocolate Chip Cookies");
         testRecipe1.setUseCount(5);
 
-        // Setup components for recipe 1
         components1 = new ArrayList<>();
 
         RecipeComponent comp1 = new RecipeComponent();
@@ -86,27 +80,24 @@ public class RecipeControllerTest {
 
         testRecipe1.setRecipeComponents(components1);
 
-        // Setup use history for recipe 1
         useHistory1 = new ArrayList<>();
 
         RecipeUseHistory history1 = new RecipeUseHistory();
         history1.setRecipe(testRecipe1);
-        history1.setLastUsed(new Date(1705276800000L)); // 2024-01-15
+        history1.setLastUsed(new Date(1705276800000L));
         useHistory1.add(history1);
 
         RecipeUseHistory history2 = new RecipeUseHistory();
         history2.setRecipe(testRecipe1);
-        history2.setLastUsed(new Date(1708387200000L)); // 2024-02-20
+        history2.setLastUsed(new Date(1708387200000L));
         useHistory1.add(history2);
 
         testRecipe1.setUseHistory(useHistory1);
 
-        // Setup recipe 2
         testRecipe2 = new Recipe();
         testRecipe2.setRecipeName("Spaghetti Marinara");
         testRecipe2.setUseCount(3);
 
-        // Setup components for recipe 2
         components2 = new ArrayList<>();
 
         RecipeComponent comp4 = new RecipeComponent();
@@ -117,18 +108,16 @@ public class RecipeControllerTest {
 
         testRecipe2.setRecipeComponents(components2);
 
-        // Setup use history for recipe 2
         useHistory2 = new ArrayList<>();
 
         RecipeUseHistory history3 = new RecipeUseHistory();
         history3.setRecipe(testRecipe2);
-        history3.setLastUsed(new Date(1710028800000L)); // 2024-03-10
+        history3.setLastUsed(new Date(1710028800000L));
         useHistory2.add(history3);
 
         testRecipe2.setUseHistory(useHistory2);
     }
 
-    // GET /api/recipes - Get All Recipes Tests
     @Test
     void getAllRecipes_ShouldReturnListOfRecipes() {
         List<Recipe> recipes = Arrays.asList(testRecipe1, testRecipe2);
@@ -158,7 +147,6 @@ public class RecipeControllerTest {
         verify(recipeService, times(1)).getAllRecipes();
     }
 
-    // GET /api/recipes/{id} - Get Recipe By ID Tests
     @Test
     void getRecipeById_ShouldReturnRecipe_WhenRecipeExists() {
         when(recipeService.getRecipeById(1)).thenReturn(testRecipe1);
@@ -189,22 +177,17 @@ public class RecipeControllerTest {
         when(recipeService.getRecipeById(1)).thenReturn(testRecipe1);
 
         ResponseEntity<Recipe> response = recipeController.getRecipeById(1);
+        RecipeComponent firstComponent = response.getBody().getRecipeComponents().get(0);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody().getRecipeComponents());
         assertEquals(3, response.getBody().getRecipeComponents().size());
-
-        // Verify component details
-        RecipeComponent firstComponent = response.getBody().getRecipeComponents().get(0);
         assertEquals("Flour", firstComponent.getIngredient().getProductName());
         assertEquals(200, firstComponent.getQuantity());
-
-        // Verify use history
         assertNotNull(response.getBody().getUseHistory());
         assertEquals(2, response.getBody().getUseHistory().size());
     }
 
-    // POST /api/recipes - Create Recipe Tests
     @Test
     void createRecipe_ShouldReturnCreatedRecipe() {
         Recipe newRecipe = new Recipe();
@@ -219,7 +202,6 @@ public class RecipeControllerTest {
 
         newRecipe.setRecipeComponents(newComponents);
         newRecipe.setUseHistory(new ArrayList<>());
-
         Recipe savedRecipe = new Recipe();
         savedRecipe.setRecipeName("Banana Bread");
         savedRecipe.setRecipeComponents(newComponents);
@@ -227,7 +209,6 @@ public class RecipeControllerTest {
         savedRecipe.setUseHistory(new ArrayList<>());
 
         when(recipeService.createRecipe(any(Recipe.class))).thenReturn(savedRecipe);
-
         Recipe result = recipeController.createRecipe(newRecipe);
 
         assertNotNull(result);
@@ -246,7 +227,6 @@ public class RecipeControllerTest {
         newRecipe.setUseHistory(new ArrayList<>());
 
         when(recipeService.createRecipe(any(Recipe.class))).thenReturn(newRecipe);
-
         Recipe result = recipeController.createRecipe(newRecipe);
 
         assertNotNull(result);
@@ -278,7 +258,6 @@ public class RecipeControllerTest {
         newRecipe.setUseHistory(new ArrayList<>());
 
         when(recipeService.createRecipe(any(Recipe.class))).thenReturn(newRecipe);
-
         Recipe result = recipeController.createRecipe(newRecipe);
 
         assertNotNull(result);
@@ -288,7 +267,6 @@ public class RecipeControllerTest {
         verify(recipeService, times(1)).createRecipe(any(Recipe.class));
     }
 
-    // PUT /api/recipes/{id} - Update Recipe Tests
     @Test
     void updateRecipe_ShouldReturnUpdatedRecipe_WhenRecipeExists() {
         Recipe updatedDetails = new Recipe();
@@ -317,7 +295,6 @@ public class RecipeControllerTest {
 
         when(recipeService.getRecipeById(1)).thenReturn(testRecipe1);
         when(recipeService.createRecipe(any(Recipe.class))).thenReturn(updatedRecipe);
-
         ResponseEntity<Recipe> response = recipeController.updateRecipe(1, updatedDetails);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -380,11 +357,9 @@ public class RecipeControllerTest {
 
         when(recipeService.getRecipeById(1)).thenReturn(existingRecipe);
         when(recipeService.createRecipe(any(Recipe.class))).thenReturn(existingRecipe);
-
         ResponseEntity<Recipe> response = recipeController.updateRecipe(1, updatedDetails);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        // Verify all fields were updated
         assertEquals("New Name", existingRecipe.getRecipeName());
         assertEquals(2, existingRecipe.getRecipeComponents().size());
         assertEquals(20, existingRecipe.getUseCount());
@@ -393,7 +368,6 @@ public class RecipeControllerTest {
         verify(recipeService, times(1)).createRecipe(existingRecipe);
     }
 
-    // DELETE /api/recipes/{id} - Delete Recipe Tests
     @Test
     void deleteRecipe_ShouldReturnNoContent() {
         doNothing().when(recipeService).deleteRecipe(1);

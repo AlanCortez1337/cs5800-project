@@ -1,14 +1,14 @@
 package com.alancortez.project.model;
 
 import com.alancortez.project.utils.USER_ROLE;
-import jakarta.persistence.*; // Use jakarta.persistence for Spring Boot 3+
+import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import java.util.Date;
 
-@MappedSuperclass // Tells JPA to inherit fields to child entities, but not map this class itself
-@NoArgsConstructor // Lombok: Generates a no-argument constructor
-@AllArgsConstructor // Lombok: Generates a constructor with all fields
+@MappedSuperclass
+@NoArgsConstructor
+@AllArgsConstructor
 public abstract class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,12 +18,9 @@ public abstract class User {
     @Column(name = "username", nullable = false, unique = true)
     protected String userName;
 
-    // Use caution when storing plain passwords in production systems.
     @Column(name = "password", nullable = false)
     protected String password;
 
-    // Assuming UserRole is either an Enum or a simple String.
-    // If it's an Enum, @Enumerated(EnumType.STRING) is recommended.
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
     protected USER_ROLE role;

@@ -31,12 +31,10 @@ public class AuthController {
         Map<String, Object> response = new HashMap<>();
 
         if (user != null && user.getPassword().equals(password)) {
-            // Store user info in session
             session.setAttribute("userId", user.getId());
             session.setAttribute("userName", user.getUsername());
             session.setAttribute("userRole", user.getRole().toString());
 
-            // Return user info (without password)
             response.put("success", true);
             response.put("user", Map.of(
                     "id", user.getId(),

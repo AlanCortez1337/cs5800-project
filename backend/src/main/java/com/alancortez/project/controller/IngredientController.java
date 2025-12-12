@@ -17,13 +17,11 @@ public class IngredientController {
     @Autowired
     private IngredientService ingredientService;
 
-    // GET /api/ingredients
     @GetMapping
     public List<Ingredient> getAllIngredients() {
         return ingredientService.getAllIngredients();
     }
 
-    // GET /api/ingredients/{id}
     @GetMapping("/{id}")
     public ResponseEntity<Ingredient> getIngredientById(@PathVariable Integer id) {
         Ingredient ingredient = ingredientService.getIngredientById(id);
@@ -33,13 +31,11 @@ public class IngredientController {
         return ResponseEntity.notFound().build();
     }
 
-    // POST /api/ingredients
     @PostMapping
     public Ingredient createIngredient(@RequestBody Ingredient ingredient) {
         return ingredientService.createIngredient(ingredient);
     }
 
-    // PUT /api/ingredients/{id}
     @PutMapping("/{id}")
     public ResponseEntity<Ingredient> updateIngredient(@PathVariable Integer id, @RequestBody Ingredient ingredientDetails) {
         Ingredient ingredient = ingredientService.getIngredientById(id);
@@ -57,7 +53,6 @@ public class IngredientController {
         return ResponseEntity.notFound().build();
     }
 
-    // DELETE /api/ingredients/{id}
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteIngredient(@PathVariable Integer id) {
         ingredientService.deleteIngredient(id);

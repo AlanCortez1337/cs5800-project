@@ -5,9 +5,9 @@ import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
-@Embeddable // Marks the class as embeddable in other entities
-@NoArgsConstructor // Lombok: Generates a no-argument constructor
-@AllArgsConstructor // Lombok: Generates a constructor with all fields
+@Embeddable
+@NoArgsConstructor
+@AllArgsConstructor
 public class Privilege {
     @Column(name = "can_create_ingredient", nullable = false)
     private Boolean canCreateIngredient = false;

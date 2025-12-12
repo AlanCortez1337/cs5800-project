@@ -40,13 +40,11 @@ public class UserService {
     }
 
     public User getUserById(Integer id) {
-        // Try to find in the Staff table
         Optional<Staff> staff = staffRepository.findById(id);
         if (staff.isPresent()) {
             return staff.get();
         }
 
-        // Try to find in the Admin table
         Optional<Admin> admin = adminRepository.findById(id);
         return admin.orElse(null);
     }
@@ -65,13 +63,12 @@ public class UserService {
     }
 
     public User getUserByUserName(String userName) {
-        // Try Staff table first
+
         Optional<Staff> staff = staffRepository.findByUserName(userName);
         if (staff.isPresent()) {
             return staff.get();
         }
 
-        // Try Admin table second
         return adminRepository.findByUserName(userName).orElse(null);
     }
 
@@ -80,14 +77,12 @@ public class UserService {
         Staff staff = (Staff) this.getUserByStaffID(staffID);
 
         if (admin == null || staff == null) {
-            // Handle error: users not found
             return;
         }
 
         PrivilegeToggleVisitor visitor = new PrivilegeToggleVisitor(privilegeToToggle, staffID);
 
         admin.accept(visitor);
-
         staff.accept(visitor);
 
         staffRepository.save(staff);

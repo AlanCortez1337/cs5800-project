@@ -17,18 +17,17 @@ public class Report {
     private ReportType reportType;
 
     @Column(nullable = false)
-    private Long entityId; // ID of the recipe or ingredient
+    private Long entityId;
 
     @Column(nullable = false)
-    private String entityName; // Name of the recipe or ingredient
+    private String entityName;
 
     @Column(nullable = false)
     private LocalDateTime timestamp;
 
     @Column
-    private Integer count; // For tracking occurrences
+    private Integer count;
 
-    // Constructors
     public Report() {
         this.timestamp = LocalDateTime.now();
         this.count = 1;
@@ -42,7 +41,6 @@ public class Report {
         this.count = 1;
     }
 
-    // Getters and Setters
     public Long getId() {
         return id;
     }

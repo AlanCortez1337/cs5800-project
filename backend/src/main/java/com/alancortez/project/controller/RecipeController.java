@@ -15,13 +15,11 @@ public class RecipeController {
     @Autowired
     private RecipeService recipeService;
 
-    // GET /api/recipes
     @GetMapping
     public List<Recipe> getAllRecipes() {
         return recipeService.getAllRecipes();
     }
 
-    // GET /api/recipes/{id}
     @GetMapping("/{id}")
     public ResponseEntity<Recipe> getRecipeById(@PathVariable Integer id) {
         Recipe recipe = recipeService.getRecipeById(id);
@@ -31,13 +29,11 @@ public class RecipeController {
         return ResponseEntity.notFound().build();
     }
 
-    // POST /api/recipes
     @PostMapping
     public Recipe createRecipe(@RequestBody Recipe recipe) {
         return recipeService.createRecipe(recipe);
     }
 
-    // PUT /api/recipes/{id}
     @PutMapping("/{id}")
     public ResponseEntity<Recipe> updateRecipe(@PathVariable Integer id, @RequestBody Recipe recipeDetails) {
         Recipe recipe = recipeService.getRecipeById(id);
@@ -47,7 +43,6 @@ public class RecipeController {
         return ResponseEntity.notFound().build();
     }
 
-    // DELETE /api/recipes/{id}
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteRecipe(@PathVariable Integer id) {
         recipeService.deleteRecipe(id);

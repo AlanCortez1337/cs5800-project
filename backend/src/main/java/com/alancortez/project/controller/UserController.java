@@ -20,13 +20,11 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    // GET /apiuser
     @GetMapping
     public List<User> getAllUsers() {
         return userService.getAllUsers();
     }
 
-    // GET /apiuser/{id}
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Integer id) {
         User user = userService.getUserById(id);
@@ -36,7 +34,6 @@ public class UserController {
         return ResponseEntity.notFound().build();
     }
 
-    // GET /apiuser/{userName}
     @GetMapping("/{userName}")
     public ResponseEntity<User> getUserByUserName(@PathVariable String userName) {
         User user = userService.getUserByUserName(userName);
@@ -46,7 +43,6 @@ public class UserController {
         return ResponseEntity.notFound().build();
     }
 
-    // GET /apiuser/staff/{id}
     @GetMapping("/staff/{id}")
     public ResponseEntity<User> getUserByStaffID(@PathVariable String staffID) {
         User user = userService.getUserByStaffID(staffID);
@@ -56,7 +52,6 @@ public class UserController {
         return ResponseEntity.notFound().build();
     }
 
-    // GET /apiuser/staff/{id}
     @GetMapping("/admin/{id}")
     public ResponseEntity<User> getUserByAdminID(@PathVariable String adminID) {
         User user = userService.getUserByAdminID(adminID);
@@ -66,7 +61,6 @@ public class UserController {
         return ResponseEntity.notFound().build();
     }
 
-    // POST /apiuser
     @PostMapping
     public User createUser(@RequestBody Map<String, String> request) {
         UserFactory userFactory = UserFactory.getInstance();
@@ -78,7 +72,6 @@ public class UserController {
         return userService.createUser(userFactory.createUser(userName, password, role));
     }
 
-    // PUT /apiuser/{id}
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable Integer id, @RequestBody Map<String, String> request) {
         User user = userService.getUserById(id);
@@ -103,7 +96,6 @@ public class UserController {
             @PathVariable String staffID,
             @RequestBody String[] privilegesToToggle
     ) {
-        // Map the array of privilege strings from the request body to the PRIVILEGES enum array
         PRIVILEGES[] privilegeEnums;
         try {
             privilegeEnums = new PRIVILEGES[privilegesToToggle.length];
@@ -111,7 +103,6 @@ public class UserController {
                 privilegeEnums[i] = PRIVILEGES.valueOf(privilegesToToggle[i].toUpperCase());
             }
         } catch (IllegalArgumentException e) {
-            // Handle case where an invalid privilege name is sent
             return new ResponseEntity<>("Invalid privilege name provided.", HttpStatus.BAD_REQUEST);
         }
 
@@ -119,8 +110,6 @@ public class UserController {
             userService.changeStaffPrivilege(adminID, staffID, privilegeEnums);
             return new ResponseEntity<>("Staff privileges updated successfully.", HttpStatus.OK);
         } catch (RuntimeException e) {
-            // Catch specific exceptions from the service layer (e.g., UserNotFoundException)
-            // For now, using a generic catch to demonstrate the service call.
             if (e.getMessage() != null && e.getMessage().contains("not found")) {
                 return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
             }
@@ -128,7 +117,6 @@ public class UserController {
         }
     }
 
-    // DELETE /apiuser/{id}
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Integer id) {
         userService.deleteUser(id);

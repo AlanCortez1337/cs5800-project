@@ -20,7 +20,6 @@ public class ReportController {
     @Autowired
     private ReportService reportService;
 
-    // Create a new report
     @PostMapping
     public ResponseEntity<Report> createReport(@RequestBody ReportRequest request) {
         try {
@@ -35,19 +34,16 @@ public class ReportController {
         }
     }
 
-    // Get all reports
     @GetMapping
     public ResponseEntity<List<Report>> getAllReports() {
         return ResponseEntity.ok(reportService.getAllReports());
     }
 
-    // Get reports by type
     @GetMapping("/type/{reportType}")
     public ResponseEntity<List<Report>> getReportsByType(@PathVariable ReportType reportType) {
         return ResponseEntity.ok(reportService.getReportsByType(reportType));
     }
 
-    // Get reports by date range
     @GetMapping("/range")
     public ResponseEntity<List<Report>> getReportsByDateRange(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
@@ -56,7 +52,6 @@ public class ReportController {
         return ResponseEntity.ok(reportService.getReportsByDateRange(start, end));
     }
 
-    // Get summary statistics
     @GetMapping("/summary")
     public ResponseEntity<Map<String, Object>> getReportSummary(
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
@@ -68,7 +63,6 @@ public class ReportController {
         return ResponseEntity.ok(reportService.getReportSummary(startDate, endDate));
     }
 
-    // Get chart data for frontend visualization
     @GetMapping("/chart")
     public ResponseEntity<List<Map<String, Object>>> getChartData(
             @RequestParam ReportType reportType,
@@ -84,7 +78,6 @@ public class ReportController {
         );
     }
 
-    // Get top entities (recipes or ingredients)
     @GetMapping("/top")
     public ResponseEntity<List<Map<String, Object>>> getTopEntities(
             @RequestParam ReportType reportType,
@@ -100,7 +93,6 @@ public class ReportController {
         );
     }
 
-    // Get dashboard data with multiple metrics
     @GetMapping("/dashboard")
     public ResponseEntity<Map<String, Object>> getDashboardData(
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
@@ -112,13 +104,11 @@ public class ReportController {
         return ResponseEntity.ok(reportService.getDashboardData(startDate, endDate));
     }
 
-    // DTO for creating reports
     public static class ReportRequest {
         private ReportType reportType;
         private Long entityId;
         private String entityName;
 
-        // Getters and Setters
         public ReportType getReportType() {
             return reportType;
         }

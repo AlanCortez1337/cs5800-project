@@ -37,12 +37,10 @@ public class IngredientControllerTest {
 
     @BeforeEach
     void setUp() {
-        // Setup unit details for ingredient 1
         unit1 = new IngredientUnit();
         unit1.setUnitOfMeasurement("kg");
         unit1.setPricePerUnit(2.50);
 
-        // Setup storage requirements for ingredient 1
         storage1 = new IngredientStorageRequirement();
         storage1.setCurrentQuantity(5.0);
         storage1.setMaxQuantityLimit(20.0);
@@ -54,12 +52,10 @@ public class IngredientControllerTest {
         testIngredient1.setUnitDetails(unit1);
         testIngredient1.setQuantityDetails(storage1);
 
-        // Setup unit details for ingredient 2
         unit2 = new IngredientUnit();
         unit2.setUnitOfMeasurement("kg");
         unit2.setPricePerUnit(3.00);
 
-        // Setup storage requirements for ingredient 2
         storage2 = new IngredientStorageRequirement();
         storage2.setCurrentQuantity(3.5);
         storage2.setMaxQuantityLimit(15.0);
@@ -72,7 +68,6 @@ public class IngredientControllerTest {
         testIngredient2.setQuantityDetails(storage2);
     }
 
-    // GET /api/ingredients - Get All Ingredients Tests
     @Test
     void getAllIngredients_ShouldReturnListOfIngredients() {
         List<Ingredient> ingredients = Arrays.asList(testIngredient1, testIngredient2);
@@ -107,7 +102,6 @@ public class IngredientControllerTest {
 
         List<Ingredient> result = ingredientController.getAllIngredients();
 
-        // Verify first ingredient details
         assertEquals("All-Purpose Flour", result.get(0).getProductName());
         assertEquals("kg", result.get(0).getUnitDetails().getUnitOfMeasurement());
         assertEquals(2.50, result.get(0).getUnitDetails().getPricePerUnit());
@@ -115,15 +109,12 @@ public class IngredientControllerTest {
         assertEquals(20.0, result.get(0).getQuantityDetails().getMaxQuantityLimit());
         assertEquals(3.0, result.get(0).getQuantityDetails().getAlertLowQuantity());
         assertEquals(2, result.get(0).getQuantityDetails().getTimesReachedLow());
-
-        // Verify second ingredient details
         assertEquals("Granulated Sugar", result.get(1).getProductName());
         assertEquals("kg", result.get(1).getUnitDetails().getUnitOfMeasurement());
         assertEquals(3.00, result.get(1).getUnitDetails().getPricePerUnit());
         assertEquals(3.5, result.get(1).getQuantityDetails().getCurrentQuantity());
     }
 
-    // GET /api/ingredients/{id} - Get Ingredient By ID Tests
     @Test
     void getIngredientById_ShouldReturnIngredient_WhenIngredientExists() {
         when(ingredientService.getIngredientById(1)).thenReturn(testIngredient1);
@@ -163,7 +154,6 @@ public class IngredientControllerTest {
         assertEquals(0, response.getBody().getQuantityDetails().getTimesReachedLow());
     }
 
-    // POST /api/ingredients - Create Ingredient Tests
     @Test
     void createIngredient_ShouldReturnCreatedIngredient() {
         IngredientUnit newUnit = new IngredientUnit();
@@ -187,7 +177,6 @@ public class IngredientControllerTest {
         savedIngredient.setQuantityDetails(newStorage);
 
         when(ingredientService.createIngredient(any(Ingredient.class))).thenReturn(savedIngredient);
-
         Ingredient result = ingredientController.createIngredient(newIngredient);
 
         assertNotNull(result);
@@ -246,7 +235,6 @@ public class IngredientControllerTest {
         newIngredient.setQuantityDetails(newStorage);
 
         when(ingredientService.createIngredient(any(Ingredient.class))).thenReturn(newIngredient);
-
         Ingredient result = ingredientController.createIngredient(newIngredient);
 
         assertNotNull(result);
@@ -256,7 +244,6 @@ public class IngredientControllerTest {
         verify(ingredientService, times(1)).createIngredient(any(Ingredient.class));
     }
 
-    // PUT /api/ingredients/{id} - Update Ingredient Tests
     @Test
     void updateIngredient_ShouldReturnUpdatedIngredient_WhenIngredientExists() {
         IngredientUnit updatedUnit = new IngredientUnit();
@@ -313,7 +300,6 @@ public class IngredientControllerTest {
         updatedDetails.setQuantityDetails(updatedStorage);
 
         when(ingredientService.getIngredientById(999)).thenReturn(null);
-
         ResponseEntity<Ingredient> response = ingredientController.updateIngredient(999, updatedDetails);
 
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
@@ -360,7 +346,6 @@ public class IngredientControllerTest {
         ResponseEntity<Ingredient> response = ingredientController.updateIngredient(1, updatedDetails);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        // Verify all fields were updated
         assertEquals("New Product Name", existingIngredient.getProductName());
         assertEquals("ml", existingIngredient.getUnitDetails().getUnitOfMeasurement());
         assertEquals(0.25, existingIngredient.getUnitDetails().getPricePerUnit());
@@ -399,7 +384,6 @@ public class IngredientControllerTest {
         assertEquals(5000.0, testIngredient1.getQuantityDetails().getCurrentQuantity());
     }
 
-    // DELETE /api/ingredients/{id} - Delete Ingredient Tests
     @Test
     void deleteIngredient_ShouldReturnNoContent() {
         doNothing().when(ingredientService).deleteIngredient(1);
@@ -429,7 +413,6 @@ public class IngredientControllerTest {
         assertThrows(RuntimeException.class, () -> {
             ingredientController.deleteIngredient(1);
         });
-
         verify(ingredientService, times(1)).deleteIngredient(1);
     }
 
