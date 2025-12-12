@@ -1,14 +1,13 @@
 package com.alancortez.project.service;
 import com.alancortez.project.model.Report;
 import com.alancortez.project.repository.ReportRepository;
-import com.alancortez.project.utils.ReportType;
+import com.alancortez.project.utils.REPORT_TYPE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -19,7 +18,7 @@ public class ReportService {
     private ReportRepository reportRepository;
 
     @Transactional
-    public Report createReport(ReportType reportType, Long entityId, String entityName) {
+    public Report createReport(REPORT_TYPE reportType, Long entityId, String entityName) {
         Report report = new Report(reportType, entityId, entityName);
         return reportRepository.save(report);
     }
@@ -33,7 +32,7 @@ public class ReportService {
         return reportRepository.findAll();
     }
 
-    public List<Report> getReportsByType(ReportType reportType) {
+    public List<Report> getReportsByType(REPORT_TYPE reportType) {
         return reportRepository.findByReportType(reportType);
     }
 
@@ -42,7 +41,7 @@ public class ReportService {
     }
 
     public List<Report> getReportsByTypeAndDateRange(
-            ReportType reportType,
+            REPORT_TYPE reportType,
             LocalDateTime start,
             LocalDateTime end
     ) {
@@ -54,12 +53,12 @@ public class ReportService {
 
         Map<String, Object> summary = new HashMap<>();
 
-        for (ReportType type : ReportType.values()) {
+        for (REPORT_TYPE type : REPORT_TYPE.values()) {
             summary.put(type.name(), 0L);
         }
 
         for (Object[] result : results) {
-            ReportType type = (ReportType) result[0];
+            REPORT_TYPE type = (REPORT_TYPE) result[0];
             Long count = (Long) result[1];
             summary.put(type.name(), count);
         }
@@ -68,7 +67,7 @@ public class ReportService {
     }
 
     public List<Map<String, Object>> getChartData(
-            ReportType reportType,
+            REPORT_TYPE reportType,
             LocalDateTime start,
             LocalDateTime end,
             String groupBy
@@ -95,7 +94,7 @@ public class ReportService {
     }
 
     public List<Map<String, Object>> getTopEntities(
-            ReportType reportType,
+            REPORT_TYPE reportType,
             LocalDateTime start,
             LocalDateTime end,
             int limit
@@ -119,22 +118,22 @@ public class ReportService {
 
         dashboard.put("summary", getReportSummary(start, end));
 
-        dashboard.put("topRecipes", getTopEntities(ReportType.RECIPE_USED, start, end, 5));
+        dashboard.put("topRecipes", getTopEntities(REPORT_TYPE.RECIPE_USED, start, end, 5));
 
-        dashboard.put("topIngredients", getTopEntities(ReportType.INGREDIENT_USED, start, end, 5));
+        dashboard.put("topIngredients", getTopEntities(REPORT_TYPE.INGREDIENT_USED, start, end, 5));
 
         Long lowStockCount = reportRepository.countByTypeAndDateRange(
-                ReportType.TIMES_INGREDIENT_REACHED_LOW, start, end
+                REPORT_TYPE.TIMES_INGREDIENT_REACHED_LOW, start, end
         );
         dashboard.put("lowStockCount", lowStockCount);
 
         Long recipesCreatedCount = reportRepository.countByTypeAndDateRange(
-                ReportType.RECIPES_CREATED, start, end
+                REPORT_TYPE.RECIPES_CREATED, start, end
         );
         dashboard.put("recipesCreatedCount", recipesCreatedCount);
 
         Long ingredientsCreatedCount = reportRepository.countByTypeAndDateRange(
-                ReportType.INGREDIENTS_CREATED, start, end
+                REPORT_TYPE.INGREDIENTS_CREATED, start, end
         );
         dashboard.put("ingredientsCreatedCount", ingredientsCreatedCount);
 
@@ -142,7 +141,7 @@ public class ReportService {
     }
 
     public Map<String, Object> getComparisonData(
-            ReportType reportType,
+            REPORT_TYPE reportType,
             LocalDateTime currentStart,
             LocalDateTime currentEnd,
             LocalDateTime previousStart,

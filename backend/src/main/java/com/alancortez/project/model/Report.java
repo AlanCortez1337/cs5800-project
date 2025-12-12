@@ -1,6 +1,6 @@
 package com.alancortez.project.model;
 
-import com.alancortez.project.utils.ReportType;
+import com.alancortez.project.utils.REPORT_TYPE;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
@@ -14,7 +14,7 @@ public class Report {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private ReportType reportType;
+    private REPORT_TYPE reportType;
 
     @Column(nullable = false)
     private Long entityId;
@@ -33,7 +33,7 @@ public class Report {
         this.count = 1;
     }
 
-    public Report(ReportType reportType, Long entityId, String entityName) {
+    public Report(REPORT_TYPE reportType, Long entityId, String entityName) {
         this.reportType = reportType;
         this.entityId = entityId;
         this.entityName = entityName;
@@ -49,11 +49,11 @@ public class Report {
         this.id = id;
     }
 
-    public ReportType getReportType() {
+    public REPORT_TYPE getReportType() {
         return reportType;
     }
 
-    public void setReportType(ReportType reportType) {
+    public void setReportType(REPORT_TYPE reportType) {
         this.reportType = reportType;
     }
 

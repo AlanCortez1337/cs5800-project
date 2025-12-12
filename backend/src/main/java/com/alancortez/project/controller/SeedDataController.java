@@ -4,7 +4,7 @@ import com.alancortez.project.model.Report;
 import com.alancortez.project.model.User;
 import com.alancortez.project.repository.ReportRepository;
 import com.alancortez.project.service.UserService;
-import com.alancortez.project.utils.ReportType;
+import com.alancortez.project.utils.REPORT_TYPE;
 import com.alancortez.project.utils.USER_ROLE;
 import com.alancortez.project.utils.UserFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +54,7 @@ public class SeedDataController {
             for (int i = 0; i < recipesPerDay; i++) {
                 int recipeIndex = random.nextInt(recipeNames.length);
                 Report report = new Report(
-                        ReportType.RECIPE_USED,
+                        REPORT_TYPE.RECIPE_USED,
                         (long) (recipeIndex + 1),
                         recipeNames[recipeIndex]
                 );
@@ -70,7 +70,7 @@ public class SeedDataController {
             for (int i = 0; i < ingredientsPerDay; i++) {
                 int ingredientIndex = random.nextInt(ingredientNames.length);
                 Report report = new Report(
-                        ReportType.INGREDIENT_USED,
+                        REPORT_TYPE.INGREDIENT_USED,
                         (long) (ingredientIndex + 1),
                         ingredientNames[ingredientIndex]
                 );
@@ -84,7 +84,7 @@ public class SeedDataController {
                 LocalDateTime date = now.minusDays(day);
                 int ingredientIndex = random.nextInt(ingredientNames.length);
                 Report report = new Report(
-                        ReportType.TIMES_INGREDIENT_REACHED_LOW,
+                        REPORT_TYPE.TIMES_INGREDIENT_REACHED_LOW,
                         (long) (ingredientIndex + 1),
                         ingredientNames[ingredientIndex]
                 );
@@ -101,7 +101,7 @@ public class SeedDataController {
                 for (int i = 0; i < recipesCreated; i++) {
                     int recipeIndex = random.nextInt(recipeNames.length);
                     Report report = new Report(
-                            ReportType.RECIPES_CREATED,
+                            REPORT_TYPE.RECIPES_CREATED,
                             (long) (recipeIndex + 1),
                             recipeNames[recipeIndex]
                     );
@@ -119,7 +119,7 @@ public class SeedDataController {
                 for (int i = 0; i < ingredientsCreated; i++) {
                     int ingredientIndex = random.nextInt(ingredientNames.length);
                     Report report = new Report(
-                            ReportType.INGREDIENTS_CREATED,
+                            REPORT_TYPE.INGREDIENTS_CREATED,
                             (long) (ingredientIndex + 1),
                             ingredientNames[ingredientIndex]
                     );

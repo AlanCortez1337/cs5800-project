@@ -3,7 +3,7 @@ package com.alancortez.project.controller;
 import com.alancortez.project.controller.ReportController.ReportRequest;
 import com.alancortez.project.model.Report;
 import com.alancortez.project.service.ReportService;
-import com.alancortez.project.utils.ReportType;
+import com.alancortez.project.utils.REPORT_TYPE;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -38,7 +38,7 @@ public class ReportControllerTest {
 
     @BeforeEach
     void setUp() {
-        testReport = new Report(ReportType.RECIPE_USED, 101L, "Test Recipe");
+        testReport = new Report(REPORT_TYPE.RECIPE_USED, 101L, "Test Recipe");
         testReport.setId(1L);
         testReport.setTimestamp(LocalDateTime.of(2023, 10, 26, 10, 0));
 
@@ -49,12 +49,12 @@ public class ReportControllerTest {
     @Test
     void createReport_ShouldReturnCreatedReport_OnSuccess() throws Exception {
         ReportRequest request = new ReportRequest();
-        request.setReportType(ReportType.INGREDIENT_USED);
+        request.setReportType(REPORT_TYPE.INGREDIENT_USED);
         request.setEntityId(202L);
         request.setEntityName("Test Ingredient");
 
         when(reportService.createReport(
-                eq(ReportType.INGREDIENT_USED),
+                eq(REPORT_TYPE.INGREDIENT_USED),
                 eq(202L),
                 eq("Test Ingredient")
         )).thenReturn(testReport);
@@ -64,7 +64,7 @@ public class ReportControllerTest {
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertEquals(testReport, response.getBody());
         verify(reportService, times(1)).createReport(
-                eq(ReportType.INGREDIENT_USED),
+                eq(REPORT_TYPE.INGREDIENT_USED),
                 eq(202L),
                 eq("Test Ingredient")
         );
@@ -73,10 +73,10 @@ public class ReportControllerTest {
     @Test
     void createReport_ShouldReturnBadRequest_OnServiceException() throws Exception {
         ReportRequest request = new ReportRequest();
-        request.setReportType(ReportType.RECIPES_CREATED);
+        request.setReportType(REPORT_TYPE.RECIPES_CREATED);
 
         doThrow(new RuntimeException("Invalid entity ID")).when(reportService).createReport(
-                eq(ReportType.RECIPES_CREATED),
+                eq(REPORT_TYPE.RECIPES_CREATED),
                 any(),
                 any()
         );
@@ -84,7 +84,7 @@ public class ReportControllerTest {
 
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         verify(reportService, times(1)).createReport(
-                eq(ReportType.RECIPES_CREATED),
+                eq(REPORT_TYPE.RECIPES_CREATED),
                 any(),
                 any()
         );
@@ -116,13 +116,13 @@ public class ReportControllerTest {
     @Test
     void getReportsByType_ShouldReturnReportsMatchingType() {
         List<Report> matchingReports = List.of(testReport);
-        when(reportService.getReportsByType(ReportType.RECIPE_USED)).thenReturn(matchingReports);
+        when(reportService.getReportsByType(REPORT_TYPE.RECIPE_USED)).thenReturn(matchingReports);
 
-        ResponseEntity<List<Report>> response = reportController.getReportsByType(ReportType.RECIPE_USED);
+        ResponseEntity<List<Report>> response = reportController.getReportsByType(REPORT_TYPE.RECIPE_USED);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(1, response.getBody().size());
-        verify(reportService, times(1)).getReportsByType(ReportType.RECIPE_USED);
+        verify(reportService, times(1)).getReportsByType(REPORT_TYPE.RECIPE_USED);
     }
 
     @Test
@@ -162,7 +162,7 @@ public class ReportControllerTest {
 
     @Test
     void getChartData_ShouldPassAllParametersCorrectly() {
-        ReportType type = ReportType.INGREDIENTS_CREATED;
+        REPORT_TYPE type = REPORT_TYPE.INGREDIENTS_CREATED;
         String groupBy = "month";
         List<Map<String, Object>> mockData = List.of(Map.of("date", "2023-01", "count", 15));
 
@@ -180,7 +180,7 @@ public class ReportControllerTest {
 
     @Test
     void getChartData_ShouldUseDefaultGroupByAndDateRange() {
-        ReportType type = ReportType.RECIPES_CREATED;
+        REPORT_TYPE type = REPORT_TYPE.RECIPES_CREATED;
         List<Map<String, Object>> mockData = Collections.emptyList();
 
         when(reportService.getChartData(eq(type), any(LocalDateTime.class), any(LocalDateTime.class), eq("day")))
@@ -196,7 +196,7 @@ public class ReportControllerTest {
 
     @Test
     void getTopEntities_ShouldPassAllParametersCorrectly() {
-        ReportType type = ReportType.RECIPE_USED;
+        REPORT_TYPE type = REPORT_TYPE.RECIPE_USED;
         int limit = 5;
         List<Map<String, Object>> mockTopData = List.of(Map.of("name", "Pizza", "count", 100));
 
@@ -214,7 +214,7 @@ public class ReportControllerTest {
 
     @Test
     void getTopEntities_ShouldUseDefaultLimitAndDateRange() {
-        ReportType type = ReportType.INGREDIENT_USED;
+        REPORT_TYPE type = REPORT_TYPE.INGREDIENT_USED;
         List<Map<String, Object>> mockTopData = Collections.emptyList();
 
         when(reportService.getTopEntities(eq(type), any(LocalDateTime.class), any(LocalDateTime.class), eq(10)))

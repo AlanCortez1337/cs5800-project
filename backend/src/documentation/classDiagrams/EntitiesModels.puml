@@ -1,7 +1,7 @@
 @startuml
 'https://plantuml.com/class-diagram
 
-enum ReportType {
+enum REPORT_TYPE {
     RECIPE_USED
     INGREDIENT_USED
     TIMES_INGREDIENT_REACHED_LOW
@@ -66,7 +66,6 @@ class IngredientStorageRequirement {
     + setTimesReachedLow(times: int): void
 }
 
-Inventory o-- Ingredient
 Ingredient *-- IngredientStorageRequirement
 Ingredient *-- IngredientUnit
 
@@ -120,18 +119,18 @@ RecipeComponent o-- Ingredient
 
 class Report {
     - id : Long
-    - reportType : ReportType
+    - reportType : REPORT_TYPE
     - entityId : Long
     - entityName : String
     - timestamp : LocalDateTime
     - count : Integer
 
-    + Report(reportType: ReportType, entityId: Long, entityName: String)
+    + Report(reportType: REPORT_TYPE, entityId: Long, entityName: String)
 
     + getId() : Long
     + setId(id: Long) : void
-    + getReportType() : ReportType
-    + setReportType(reportType: ReportType) : void
+    + getReportType() : REPORT_TYPE
+    + setReportType(reportType: REPORT_TYPE) : void
     + getEntityId() : Long
     + setEntityId(entityId: Long) : void
     + getEntityName() : String

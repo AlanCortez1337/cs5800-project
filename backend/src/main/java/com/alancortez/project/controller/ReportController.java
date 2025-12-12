@@ -1,7 +1,7 @@
 package com.alancortez.project.controller;
 
 import com.alancortez.project.model.Report;
-import com.alancortez.project.utils.ReportType;
+import com.alancortez.project.utils.REPORT_TYPE;
 import com.alancortez.project.service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -40,7 +40,7 @@ public class ReportController {
     }
 
     @GetMapping("/type/{reportType}")
-    public ResponseEntity<List<Report>> getReportsByType(@PathVariable ReportType reportType) {
+    public ResponseEntity<List<Report>> getReportsByType(@PathVariable REPORT_TYPE reportType) {
         return ResponseEntity.ok(reportService.getReportsByType(reportType));
     }
 
@@ -65,7 +65,7 @@ public class ReportController {
 
     @GetMapping("/chart")
     public ResponseEntity<List<Map<String, Object>>> getChartData(
-            @RequestParam ReportType reportType,
+            @RequestParam REPORT_TYPE reportType,
             @RequestParam(defaultValue = "day") String groupBy,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end
@@ -80,7 +80,7 @@ public class ReportController {
 
     @GetMapping("/top")
     public ResponseEntity<List<Map<String, Object>>> getTopEntities(
-            @RequestParam ReportType reportType,
+            @RequestParam REPORT_TYPE reportType,
             @RequestParam(defaultValue = "10") int limit,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end
@@ -105,15 +105,15 @@ public class ReportController {
     }
 
     public static class ReportRequest {
-        private ReportType reportType;
+        private REPORT_TYPE reportType;
         private Long entityId;
         private String entityName;
 
-        public ReportType getReportType() {
+        public REPORT_TYPE getReportType() {
             return reportType;
         }
 
-        public void setReportType(ReportType reportType) {
+        public void setReportType(REPORT_TYPE reportType) {
             this.reportType = reportType;
         }
 

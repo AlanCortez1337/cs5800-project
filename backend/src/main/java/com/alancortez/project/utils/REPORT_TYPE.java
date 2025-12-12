@@ -1,6 +1,6 @@
 package com.alancortez.project.utils;
 
-public enum ReportType {
+public enum REPORT_TYPE {
     RECIPE_USED,
     INGREDIENT_USED,
     TIMES_INGREDIENT_REACHED_LOW,

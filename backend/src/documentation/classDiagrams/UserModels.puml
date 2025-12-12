@@ -1,7 +1,7 @@
 @startuml
 'https://plantuml.com/class-diagram
 
-enum UserRole {
+enum USER_ROLE {
     STAFF
     ADMIN
 }
@@ -21,7 +21,7 @@ abstract User {
     # id: Integer
     # username: String
     # password: String
-    # role: UserRole
+    # role: USER_ROLE
     # dateCreated: Date
 
     + getID(): Integer
@@ -30,8 +30,8 @@ abstract User {
     + setUsername(userName: String): void
     + getPassword(): String
     + setPassword(password: String): void
-    + getRole(): UserRole
-    + setRole(role: UserRole): void
+    + getRole(): USER_ROLE
+    + setRole(role: USER_ROLE): void
     + getDateCreated(): Date
     + accept(UserActionVisitor visitor): void
 }
@@ -112,8 +112,8 @@ class UserFactory {
     - {static} instance: UserFactory
     + {static} getInstance(): UserFactory
 
-    + getUserType(role: UserRole)
-    + createNewUser(userName: String, password: String, role: UserRole)
+    + getUserType(role: USER_ROLE)
+    + createNewUser(userName: String, password: String, role: USER_ROLE)
 }
 
 UserFactory *-- UserFactory
